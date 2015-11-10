@@ -3,7 +3,9 @@ package hello;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
@@ -22,9 +24,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 //@RequestMapping("/")
 public class HelloController {
 
-	private Twitter twitter;
+	private final Twitter twitter;
 
-	private ConnectionRepository connectionRepository;
+	private final ConnectionRepository connectionRepository;
 
 	@Inject
 	public HelloController(Twitter twitter, ConnectionRepository connectionRepository) {
@@ -40,18 +42,19 @@ public class HelloController {
 		if (bindingResult.hasErrors()) {
 			return "redirect:/connect/twitter";
 		}
-		System.out.println(company.getXx());
+		System.out.println(company.getTwitterUser());
 
-		Company resultCompany = new Company(twitter.userOperations().getUserProfile(company.getXx()));
-		String location = resultCompany.getCompanyProfile().getLocation();
-		List<TwitterProfile> followers = twitter.friendOperations().getFollowers(company.getXx());
+		Company resultCompany = new Company(company.getTwitterUser());
+		resultCompany.setCompanyProfile(twitter.userOperations().getUserProfile(company.getTwitterUser()));
+		//String location = resultCompany.getCompanyProfile().getLocation();
+		//List<TwitterProfile> followers = twitter.friendOperations().getFollowers(company.getTwitterUser());
 
 
 		List<ProfileRelation> relations = new ArrayList<ProfileRelation>();
-		relations.addAll(relationsFollowers(twitter.friendOperations().getFollowers(company.getXx()), resultCompany));
+		relations.addAll(relationsFollowers(twitter.friendOperations().getFollowers(company.getTwitterUser()), resultCompany));
 		relations.addAll(relationsCitations());
 		relations.addAll(relationsRetweets());
-		
+
 
 
 		return "hello";
@@ -67,9 +70,9 @@ public class HelloController {
 		return null;
 	}
 
-	private Collection<? extends ProfileRelation> relationsFollowers(
+	private Set<ProfileRelation> relationsFollowers(
 			CursoredList<TwitterProfile> followers, Company resultCompany) {
-		List<ProfileRelation> relations = new ArrayList<ProfileRelation>();
+		Set<ProfileRelation> relations = new HashSet<ProfileRelation>();
 		ProfileRelation relation = null;
 
 		boolean anyRelation = false;
@@ -83,7 +86,7 @@ public class HelloController {
 			else{
 				relation.setDescription(false);
 			}
-			if(follower.getLocation() != null 
+			if(follower.getLocation() != null
 					&& (follower.getLocation().contains(resultCompany.getCompanyProfile().getLocation())
 							|| resultCompany.getCompanyProfile().getLocation().contains(follower.getLocation()))){
 				relation.setLocation(true);
@@ -92,7 +95,7 @@ public class HelloController {
 			else{
 				relation.setLocation(false);
 			}
-			if(follower.getName() != null && (follower.getName().contains(resultCompany.getCompanyProfile().getName()) 
+			if(follower.getName() != null && (follower.getName().contains(resultCompany.getCompanyProfile().getName())
 					|| resultCompany.getCompanyProfile().getName().contains(follower.getName()))){
 				anyRelation = true;
 				relation.setSubsidiary(true);

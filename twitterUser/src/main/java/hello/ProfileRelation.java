@@ -17,7 +17,7 @@ public class ProfileRelation {
     private boolean description;
     private boolean location;
     private boolean subsidiary;
-    
+
 	public String getId() {
 		return id;
 	}
@@ -78,5 +78,5 @@ public class ProfileRelation {
 	public void setSubsidiary(boolean subsidiary) {
 		this.subsidiary = subsidiary;
 	}
-    
+
 }
