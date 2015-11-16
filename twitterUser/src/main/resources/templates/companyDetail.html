@@ -8,7 +8,7 @@
 		<h4>These are your friends:</h4>
 
 		<ul>
-			<li th:each="friend:${friends}" th:text="${friend.name}">Friend</li>
+			<li th:each="result:${result}" th:text="${result.twitterProfile}">Friend</li>
 		</ul>
 	</body>
 </html>

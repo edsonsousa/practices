@@ -1,7 +1,7 @@
 package hello;
 
 
-import java.util.Set;
+import java.util.HashMap;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.social.twitter.api.TwitterProfile;
@@ -14,7 +14,7 @@ public class Company {
 
     private String twitterUser;
     private TwitterProfile companyProfile;
-    private Set<ProfileRelation> listEmployees;
+    private HashMap<String, ProfileRelation> listEmployees;
 
     public Company(String twitterUser) {
     	setTwitterUser(twitterUser);
@@ -47,20 +47,20 @@ public class Company {
 		this.twitterUser = twitterUser;
 	}
 
-	public Set<ProfileRelation> getListEmployees() {
-		return listEmployees;
-	}
-
-	public void setListEmployees(Set<ProfileRelation> listEmployees) {
-		this.listEmployees = listEmployees;
-	}
-
 	public TwitterProfile getCompanyProfile() {
 		return companyProfile;
 	}
 
 	public void setCompanyProfile(TwitterProfile companyProfile) {
 		this.companyProfile = companyProfile;
+	}
+
+	public HashMap<String, ProfileRelation> getListEmployees() {
+		return listEmployees;
+	}
+
+	public void setListEmployees(HashMap<String, ProfileRelation> listEmployees) {
+		this.listEmployees = listEmployees;
 	}
 
 }
