@@ -1,7 +1,9 @@
 package hello;
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.social.twitter.api.TwitterProfile;
@@ -14,7 +16,8 @@ public class Company {
 
     private String twitterUser;
     private TwitterProfile companyProfile;
-    private HashMap<String, ProfileRelation> listEmployees;
+    private HashMap<String, ProfileRelation> mapEmployees;
+    private List<ProfileRelation> listEmployees;
 
     public Company(String twitterUser) {
     	setTwitterUser(twitterUser);
@@ -55,11 +58,19 @@ public class Company {
 		this.companyProfile = companyProfile;
 	}
 
-	public HashMap<String, ProfileRelation> getListEmployees() {
-		return listEmployees;
+	public HashMap<String, ProfileRelation> getMapEmployees() {
+		return mapEmployees;
 	}
 
-	public void setListEmployees(HashMap<String, ProfileRelation> listEmployees) {
+	public void setMapEmployees(HashMap<String, ProfileRelation> mapEmployees) {
+		this.mapEmployees = mapEmployees;
+	}
+
+	public List<ProfileRelation> getListEmployees() {
+		return new ArrayList<ProfileRelation>(getMapEmployees().values());
+	}
+
+	public void setListEmployees(List<ProfileRelation> listEmployees) {
 		this.listEmployees = listEmployees;
 	}
 

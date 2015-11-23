@@ -1,6 +1,7 @@
 package hello;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -31,7 +32,14 @@ public class CompanyServiceImpl implements CompanyService{
 
 	public Company searchEmployees(String twitterUser) {
 		Company resultCompany = new Company(twitterUser);
-		TwitterProfile profile = twitter.userOperations().getUserProfile(twitterUser);
+		TwitterProfile profile = null;
+		try{
+			 profile = twitter.userOperations().getUserProfile(twitterUser);	
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		
 
 		if(profile == null){
 			return null;
@@ -46,15 +54,27 @@ public class CompanyServiceImpl implements CompanyService{
 		List<ProfileRelation> relationsFollowers = relationsFollowers(twitter.friendOperations().getFollowers(twitterUser), resultCompany);
 
 		List<ProfileRelation> relationsTweets = relationsTweets(twitter.timelineOperations().getUserTimeline(twitterUser, 200),resultCompany);//returns relations from company tweets
-		relations.addAll(relationsRetweets());
+//		relations.addAll(relationsRetweets());
 
 		//relations.addAll(relationsMentions());
 
 		//List<Tweet> tweets = twitter.timelineOperations().getMentions();
-
+		relations.addAll(relationsTweets);
+		relations.addAll(relationsFollowers);
+		resultCompany.setMapEmployees(relationsToHashMap(relations));
 		return resultCompany;
 	}
 
+
+	private HashMap<String, ProfileRelation> relationsToHashMap(List<ProfileRelation> relations) {
+		HashMap<String, ProfileRelation> h = new HashMap<String, ProfileRelation>();
+		for (ProfileRelation profileRelation : relations) {
+			if(!h.containsKey(profileRelation.getProfile().getName())){
+				h.put(profileRelation.getProfile().getName(), profileRelation);
+			}
+		}
+		return h;
+	}
 
 	private Set<ProfileRelation> relationsRetweets() {
 		// TODO Auto-generated method stub
@@ -103,6 +123,7 @@ public class CompanyServiceImpl implements CompanyService{
 			}
 			if(anyRelation){
 				relation.setCompany(resultCompany);
+				relation.setProfile(follower);
 				relations.add(relation);
 			}
 		}

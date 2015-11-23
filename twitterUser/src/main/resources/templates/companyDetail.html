@@ -1,14 +1,28 @@
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 	<head>
-		<title>Hello Twitter</title>
+		<title>Twitter</title>
 	</head>
 	<body>
-		<h3>Hello, <span th:text="${twitterProfile.name}">Some User</span>!</h3>
-
-		<h4>These are your friends:</h4>
+		<h3>Results for company <span th:text="${result.twitterUser}"></span>!</h3>
 
 		<ul>
-			<li th:each="result:${result}" th:text="${result.twitterProfile}">Friend</li>
+			<li th:each="list:${result.listEmployees}" th:text="${list.profile.name}">Friend</li>
 		</ul>
+		
+		<table>
+	      <tr>
+	      	<th>#</th>
+	        <th>Profile</th>
+	        <th>Name</th>
+	      </tr>
+	      <tr th:each="emp,iterationStatus  : ${result.listEmployees}">
+	        <td th:text="${iterationStatus.count}">1</td>
+
+	        <td th:text="${emp.profile.screenName}">Profile</td>
+	        <td th:text="${emp.profile.name}">Name</td>
+	       <!--  <td th:text="${emp.companyProfile.location}">Local</td> -->
+	      </tr>
+	    </table>
+		
 	</body>
 </html>

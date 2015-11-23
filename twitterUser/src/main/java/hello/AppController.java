@@ -4,7 +4,6 @@ package hello;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.connect.ConnectionRepository;
@@ -13,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,7 +23,6 @@ public class AppController {
 
 	private final ConnectionRepository connectionRepository;
 
-
 	@Autowired
 	private CompanyService service;
 
@@ -31,7 +30,6 @@ public class AppController {
 	public AppController(ConnectionRepository connectionRepository) {
 		this.connectionRepository = connectionRepository;
 	}
-
 
 	@RequestMapping(value={"/","/list"}, method=RequestMethod.GET)
 	public String startForm(Model model) {
@@ -44,20 +42,24 @@ public class AppController {
 	}
 
 	@RequestMapping(value="/search", method=RequestMethod.POST)
-	public String checkPersonInfo(@Valid Company company, BindingResult bindingResult, Model model) {
+	public String checkPersonInfo(@ModelAttribute Company company, Model model) {
+//		model.addAttribute("company", company);
+		company = (Company) model.asMap().get("company");
 		if (connectionRepository.findPrimaryConnection(Twitter.class) == null) {
 			service.registerTwitter();
 		}
-		if (bindingResult.hasErrors()) {
-			return "redirect:/connect/twitter";
-		}
-
+//		if (bindingResult.hasErrors()) {
+//			return "redirect:/connect/twitter";
+//		}
+		
 		System.out.println(company.getTwitterUser());
 
 		Company result = service.searchEmployees(company.getTwitterUser());
 
 		if(result != null){
 			model.addAttribute("result", result);
+		}else{
+			return "noResult";
 		}
 
 		return "companyDetail";
