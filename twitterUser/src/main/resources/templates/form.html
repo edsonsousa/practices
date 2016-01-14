@@ -1,18 +1,20 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<title>Discover employees companies with Twitter</title>
+<title>Discover relations via Twitter</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
+	<h1>Discover relations via Twitter</h1>
+	
 	<h3>Inform @ user to search</h3>
 
-	<form action="#" th:action="@{/search}" th:object="${company}"
+	<form action="#" th:action="@{/search}" th:object="${relation}"
 		method="post">
 		<table>
 			<tr>
-				<td>Name:</td>
-				<td><input type="text" th:field="*{twitterUser}" /></td>
+				<td>User:</td>
+				<td><input type="text" th:field="*{user}" /></td>
 			</tr>
 			<tr>
 				<td><button type="submit">Submit</button></td>
@@ -22,17 +24,16 @@
 		</table>
 	</form>
 
-<h1>Companies</h1>
-	    <table>
+<h1>Last Users Consulted</h1>
+	    <table border="1">
 	      <tr>
-	        <th>Company Profile</th>
-	        <th>Probable Employees amount</th>
+	      	<th></th>
+	        <th>User</th>
 	      </tr>
-	      <tr th:each="emp,iterationStatus  : ${companies}">
+	      <tr th:each="emp,iterationStatus  : ${relations}">
 	        <td th:text="${iterationStatus.count}">1</td>
 
-	        <td th:text="${emp.twitterUser}">Profile</td>
-	       <!--  <td th:text="${emp.companyProfile.location}">Local</td> -->
+	        <td th:text="${emp.user}">User</td>
 	      </tr>
 	    </table>
 

@@ -1,4 +1,6 @@
 package hello;
+import java.util.Date;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.social.twitter.api.TwitterProfile;
 
@@ -8,33 +10,20 @@ public class ProfileRelation {
 	@Id
     private String id;
 
-    private TwitterProfile profile;
-    private Company company;
+	private String user;
+    private String profileRelated;
     private int favoritedCount;
     private int mentionCount;
     private int retweetCount;
     private int mentionedCount;
-    private boolean description;
-    private boolean location;
-    private boolean subsidiary;
+	private Date dateQuery;
+   
 
 	public String getId() {
 		return id;
 	}
 	public void setId(String id) {
 		this.id = id;
-	}
-	public TwitterProfile getProfile() {
-		return profile;
-	}
-	public void setProfile(TwitterProfile profile) {
-		this.profile = profile;
-	}
-	public Company getCompany() {
-		return company;
-	}
-	public void setCompany(Company company) {
-		this.company = company;
 	}
 	public int getFavoritedCount() {
 		return favoritedCount;
@@ -60,23 +49,35 @@ public class ProfileRelation {
 	public void setMentionedCount(int mentionedCount) {
 		this.mentionedCount = mentionedCount;
 	}
-	public boolean isDescription() {
-		return description;
+	public String getUser() {
+		return user;
 	}
-	public void setDescription(boolean description) {
-		this.description = description;
+	public void setUser(String user) {
+		this.user = user;
 	}
-	public boolean isLocation() {
-		return location;
+	
+	@Override
+	public boolean equals(Object obj) {
+		// TODO Auto-generated method stub
+		return super.equals(obj);
 	}
-	public void setLocation(boolean location) {
-		this.location = location;
+	
+	@Override
+	public int hashCode() {
+		// TODO Auto-generated method stub
+		return super.hashCode();
 	}
-	public boolean isSubsidiary() {
-		return subsidiary;
+	public Date getDateQuery() {
+		return dateQuery;
 	}
-	public void setSubsidiary(boolean subsidiary) {
-		this.subsidiary = subsidiary;
+	public void setDateQuery(Date dateQuery) {
+		this.dateQuery = dateQuery;
+	}
+	public String getProfileRelated() {
+		return profileRelated;
+	}
+	public void setProfileRelated(String profileRelated) {
+		this.profileRelated = profileRelated;
 	}
 
 }

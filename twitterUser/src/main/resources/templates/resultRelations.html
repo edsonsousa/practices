@@ -1,0 +1,32 @@
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title>Twitter</title>
+	</head>
+	<body>
+		<h3>Results for User <span th:text="${user}"></span>!</h3>
+
+<!-- 		<ul>
+			<li th:each="list:${result}" th:text="${list.profile.name}">Friend</li>
+		</ul> -->
+		
+		<table border="1">
+	      <tr>
+	      	<th>#</th>
+	        <th>Profile</th>
+	        <th>Mention Count</th>
+	        <th>Mentioned Count</th>
+	        <th>Retweet Count</th>
+	      </tr>
+	      <tr th:each="emp,iterationStatus  : ${result}">
+	        <td th:text="${iterationStatus.count}">1</td>
+
+	        <td th:text="${emp.profileRelated}">Profile</td>
+	        <td th:text="${emp.mentionCount}">Mention Count</td>
+	        <td th:text="${emp.mentionedCount}">Mentioned Count</td>
+	        <td th:text="${emp.retweetCount}">Retweet Count</td>
+	       <!--  <td th:text="${emp.companyProfile.location}">Local</td> -->
+	      </tr>
+	    </table>
+		
+	</body>
+</html>

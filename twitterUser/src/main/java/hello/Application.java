@@ -14,7 +14,10 @@ public class Application extends SpringBootServletInitializer{
 	private static final Logger log = LoggerFactory.getLogger(Application.class);
 
 	@Autowired
-	private CompanyRepository repository;
+	private ProfileRelationRepository repository;
+	
+	@Autowired
+	private ProfileRelationCustom repositoryCustom;
 
 	@Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
