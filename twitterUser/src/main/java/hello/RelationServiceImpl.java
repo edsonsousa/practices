@@ -19,6 +19,21 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class RelationServiceImpl implements RelationService{
 
+	/**
+	 * 
+	 */
+	private static final String SPRING_SOCIAL_TWITTER_APPSECRET = "";
+
+	/**
+	 * 
+	 */
+	private static final String SPRING_SOCIAL_TWITTER_APPID = "";
+
+	/**
+	 * 
+	 */
+	private static final String AT = "@";
+
 	@Autowired
 	ProfileRelationRepository repository;
 
@@ -50,7 +65,7 @@ public class RelationServiceImpl implements RelationService{
 		List<String> citations;
 		ProfileRelation p;
 		for (Tweet tweet : tweets) {
-			if(tweet.getText().contains("@")){
+			if(tweet.getText().contains(AT)){
 				citations = returnUsers(tweet.getText());
 				if(citations != null && citations.size() > 0){
 					for (String user : citations) {
@@ -85,7 +100,6 @@ public class RelationServiceImpl implements RelationService{
 		List<String> r = new ArrayList<String>();
 		for (int i = 0; i < text.length(); i++) {
 			if(text.charAt(i) == '@' || begin > 0){
-				//i++;
 				if(begin == 0){
 					begin = i+1;
 					end = i+1;
@@ -107,7 +121,7 @@ public class RelationServiceImpl implements RelationService{
 		twitter = connection != null ?
 				connection.getApi() :
 					new TwitterTemplate(
-							"hZmoB4O5afAAyboLvuQJovYil","kWmUEhW1wyBvTK3pztt49gxbgSSDYTAxoq8P8lHgkj9JdjYDWc");
+							SPRING_SOCIAL_TWITTER_APPID,SPRING_SOCIAL_TWITTER_APPSECRET);
 
 	}
 
