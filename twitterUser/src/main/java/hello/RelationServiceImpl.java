@@ -19,20 +19,13 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class RelationServiceImpl implements RelationService{
 
-	/**
-	 * 
-	 */
 	private static final String SPRING_SOCIAL_TWITTER_APPSECRET = "";
 
-	/**
-	 * 
-	 */
 	private static final String SPRING_SOCIAL_TWITTER_APPID = "";
 
-	/**
-	 * 
-	 */
 	private static final String AT = "@";
+
+	private static final int QTD_RETRIEVE_TWEETS = 100;
 
 	@Autowired
 	ProfileRelationRepository repository;
@@ -41,56 +34,52 @@ public class RelationServiceImpl implements RelationService{
 
 	private Connection<Twitter> connection;
 
+	@Override
 	public List<ProfileRelation> findAll() {
 		return repository.findAll();
 	}
 
 
 	@Override
-	public Collection<ProfileRelation> searchRelations(String twitterUser) {
-		TwitterProfile profile = null;
+	public Collection<ProfileRelation> searchRelations(TwitterProfile profile) {
+		HashMap<String, ProfileRelation> hashRelations = new HashMap<String, ProfileRelation>();
+		List<Tweet> tweets = null;
+		List<String> citations = null;
+		ProfileRelation profileRelation;
 		try{
-			profile = twitter.userOperations().getUserProfile(twitterUser);	
-		}
-		catch(Exception e){
-			e.printStackTrace();
-		}
-
-
-		if(profile == null){
-			return null;
-		}
-		HashMap<String, ProfileRelation> h = new HashMap<String, ProfileRelation>();
-		List<Tweet> tweets = twitter.timelineOperations().getUserTimeline(twitterUser,100);
-		List<String> citations;
-		ProfileRelation p;
-		for (Tweet tweet : tweets) {
-			if(tweet.getText().contains(AT)){
-				citations = returnUsers(tweet.getText());
-				if(citations != null && citations.size() > 0){
-					for (String user : citations) {
-						//System.out.println(user);
-						if(!h.containsKey(user)){
-							p = new ProfileRelation();
-							p.setUser(twitterUser);
-							p.setProfileRelated(user);
-							h.put(user, p);
+						
+			tweets = twitter.timelineOperations().getUserTimeline(profile.getName(),QTD_RETRIEVE_TWEETS);
+			
+			for (Tweet tweet : tweets) {
+				if(tweet.getText().contains(AT)){
+					citations = returnUsers(tweet.getText());
+					if(citations != null && citations.size() > 0){
+						for (String user : citations) {
+							if(!hashRelations.containsKey(user)){
+								profileRelation = new ProfileRelation();
+								profileRelation.setUser(profile.getName());
+								profileRelation.setProfileRelated(user);
+								hashRelations.put(user, profileRelation);
+							}
+							profileRelation = hashRelations.get(user);
+							if(!tweet.isRetweet()){
+								profileRelation.setMentionCount(profileRelation.getMentionCount()+1);
+							}
+							else{
+								profileRelation.setRetweetCount(profileRelation.getRetweetCount()+1);
+							}
+							hashRelations.put(user, profileRelation);
+							profileRelation.setDateQuery(new Date());
+							repository.save(profileRelation);
 						}
-						p = h.get(user);
-						if(!tweet.isRetweet()){
-							p.setMentionCount(p.getMentionCount()+1);
-						}
-						else{
-							p.setRetweetCount(p.getRetweetCount()+1);
-						}
-						h.put(user, p);
-						p.setDateQuery(new Date());
-						repository.save(p);
 					}
 				}
 			}
 		}
-		return h.values();
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		return hashRelations.values();
 	}
 
 
@@ -116,13 +105,20 @@ public class RelationServiceImpl implements RelationService{
 		}
 		return r;
 	}
-	
+
+	@Override
 	public void registerTwitter() {
 		twitter = connection != null ?
 				connection.getApi() :
 					new TwitterTemplate(
 							SPRING_SOCIAL_TWITTER_APPID,SPRING_SOCIAL_TWITTER_APPSECRET);
 
+	}
+
+
+	@Override
+	public TwitterProfile findTwitterUser(String user) throws Exception{
+		return twitter.userOperations().getUserProfile(user);	
 	}
 
 }

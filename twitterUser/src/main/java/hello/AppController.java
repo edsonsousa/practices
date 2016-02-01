@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.twitter.api.Twitter;
+import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -22,7 +23,7 @@ public class AppController {
 
 	@Autowired
 	private RelationService service;
-		
+
 	@Autowired
 	private ProfileRelationCustom repositoryCustom;
 
@@ -49,10 +50,17 @@ public class AppController {
 		if (connectionRepository.findPrimaryConnection(Twitter.class) == null) {
 			service.registerTwitter();
 		}
+		TwitterProfile twitterUser;
+		
+		try {
+			twitterUser = service.findTwitterUser(relation.getUser());
+		} catch (Exception e) {
+			return "noResult";
+		}
 
-		Collection<ProfileRelation> result = service.searchRelations(relation.getUser());
+		Collection<ProfileRelation> result = service.searchRelations(twitterUser);
 
-		if(result != null){
+		if(result != null && result.size() > 0){
 			model.addAttribute("user",relation.getUser());
 			model.addAttribute("result", result);
 		}else{
