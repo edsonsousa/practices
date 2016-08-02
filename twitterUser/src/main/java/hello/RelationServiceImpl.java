@@ -19,6 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class RelationServiceImpl implements RelationService{
 
+	private static final char AT_CHAR = '@';
+
 	private static final String SPRING_SOCIAL_TWITTER_APPSECRET = "";
 
 	private static final String SPRING_SOCIAL_TWITTER_APPID = "";
@@ -92,7 +94,7 @@ public class RelationServiceImpl implements RelationService{
 		List<String> r = new ArrayList<String>();
 		for (int i = 0; i < text.length(); i++) {
 			//Finds @ in text and starts to count
-			if(text.charAt(i) == '@' || begin > 0){
+			if(text.charAt(i) == AT_CHAR || begin > 0){
 				if(begin == 0){
 					begin = i+1;
 					end = i+1;
