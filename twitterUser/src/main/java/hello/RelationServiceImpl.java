@@ -47,9 +47,9 @@ public class RelationServiceImpl implements RelationService{
 		List<String> citations = null;
 		ProfileRelation profileRelation;
 		try{
-						
+
 			tweets = twitter.timelineOperations().getUserTimeline(profile.getName(),QTD_RETRIEVE_TWEETS);
-			
+
 			for (Tweet tweet : tweets) {
 				if(tweet.getText().contains(AT)){
 					citations = returnUsers(tweet.getText());
@@ -82,17 +82,22 @@ public class RelationServiceImpl implements RelationService{
 		return hashRelations.values();
 	}
 
-
+	/*
+	 * Find list of users in tweet text
+	 * 
+	 */
 	private List<String> returnUsers(String text) {
 		int begin = 0;
 		int end = 0;
 		List<String> r = new ArrayList<String>();
 		for (int i = 0; i < text.length(); i++) {
+			//Finds @ in text and starts to count
 			if(text.charAt(i) == '@' || begin > 0){
 				if(begin == 0){
 					begin = i+1;
 					end = i+1;
 				}
+				//increase end until find blank space or ':' 
 				if(!(text.charAt(i) == ' ') && !(text.charAt(i) == ':')){
 					end++;
 				}
