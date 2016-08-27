@@ -1,0 +1,39 @@
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+	<h:panelGroup>
+		<div style="margin: 0 auto;">
+			<div style="float: left;">
+				<h:outputLabel value="Customers: "
+					style="font:bold 16px arial,georgia,sans-serif" />
+				<h:outputText rendered="#{empty customers}">
+					<em>No registered Customers.</em>
+				</h:outputText>
+			</div>
+
+			<h:selectOneMenu styleClass="form-control"
+				rendered="#{not empty customers}" id="customersDrop"
+				value="#{customerBean.customerSelected}">
+				<f:selectItem id="idCustomerSelect" itemLabel="" itemValue="" />
+				<f:selectItems id="idCustomers" value="#{customers}" var="customer"
+					itemLabel="#{customer.name}" itemValue="#{customer}" />
+			</h:selectOneMenu>
+
+			<h:form>
+				<div>
+					<br />
+					<h:commandLink value="Parking Info" action="#{parkingBean.findParkingLogCustomer(customerBean.customerSelected)}"
+						style="font:bold 14px arial,georgia,sans-serif">
+					</h:commandLink>
+					<br />
+					<h:commandLink value="Invoices"
+						style="font:bold 14px arial,georgia,sans-serif">
+					</h:commandLink>
+				</div>
+			</h:form>
+		</div>
+	</h:panelGroup>
+
+</ui:fragment>
