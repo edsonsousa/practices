@@ -1,8 +1,11 @@
 package br.edson.sousa.controller;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.enterprise.context.ConversationScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.enterprise.inject.Model;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -14,7 +17,13 @@ import br.edson.sousa.model.ParkingRegister;
 import br.edson.sousa.service.ParkingService;
 
 @Model
-public class ParkingBean {
+@SessionScoped
+public class ParkingBean implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3355878650765828923L;
 
 	@Inject
 	ParkingService parkingService;
@@ -31,6 +40,10 @@ public class ParkingBean {
 		if (customer != null) {
 			parkingLog = parkingDao.findAllRegitersByCustomer(customer);
 
+			if(parkingLog.isEmpty()){
+				facesContext.addMessage(null,
+						new FacesMessage(FacesMessage.SEVERITY_INFO, "No Data for Selected User.", ""));
+			}
 			return "parkingLog";
 		} else {
 			facesContext.addMessage(null,

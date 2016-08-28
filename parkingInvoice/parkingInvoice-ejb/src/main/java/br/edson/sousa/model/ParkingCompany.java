@@ -44,7 +44,7 @@ public class ParkingCompany implements Serializable {
 	@NotNull
 	@NotEmpty
 	@Email
-	private String email;
+	private String emailCompany;
 
 	public Long getId() {
 		return id;
@@ -62,12 +62,12 @@ public class ParkingCompany implements Serializable {
 		this.name = name;
 	}
 
-	public String getEmail() {
-		return email;
+	public String getEmailCompany() {
+		return emailCompany;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public void setEmailCompany(String emailCompany) {
+		this.emailCompany = emailCompany;
 	}
 
 }

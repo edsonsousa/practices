@@ -16,6 +16,8 @@
  */
 package br.edson.sousa.data;
 
+import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.event.Observes;
@@ -23,32 +25,32 @@ import javax.enterprise.event.Reception;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.util.List;
 
+import br.edson.sousa.model.Customer;
 import br.edson.sousa.model.Member;
 
 @RequestScoped
-public class MemberListProducer {
+public class CustomerListProducer {
 
     @Inject
-    private MemberRepository memberRepository;
+    private CustomerDao customerDao;
 
-    private List<Member> members;
+    private List<Customer> customers;
 
     // @Named provides access the return value via the EL variable name "members" in the UI (e.g.,
     // Facelets or JSP view)
     @Produces
     @Named
-    public List<Member> getMembers() {
-        return members;
+    public List<Customer> getCustomers() {
+        return customers;
     }
 
-    public void onMemberListChanged(@Observes(notifyObserver = Reception.IF_EXISTS) final Member member) {
-        retrieveAllMembersOrderedByName();
+    public void onMemberListChanged(@Observes(notifyObserver = Reception.IF_EXISTS) final Customer customer) {
+        retrieveAllCustomersOrderedByName();
     }
 
     @PostConstruct
-    public void retrieveAllMembersOrderedByName() {
-        members = memberRepository.findAllOrderedByName();
+    public void retrieveAllCustomersOrderedByName() {
+    	customers = customerDao.getAll();
     }
 }

@@ -1,29 +1,43 @@
 package br.edson.sousa.controller;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.inject.Model;
+import javax.enterprise.context.ConversationScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import javax.inject.Named;
 
+import br.edson.sousa.data.InvoiceDao;
+import br.edson.sousa.model.Customer;
+import br.edson.sousa.model.ParkingInvoice;
 import br.edson.sousa.model.ParkingRegister;
 import br.edson.sousa.service.InvoiceService;
 
-@Model
-public class InvoiceBean {
+@Named
+@ConversationScoped
+public class InvoiceBean implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5013811333931499032L;
 
 	@Inject
 	InvoiceService invoiceService;
+	
+	@Inject
+	InvoiceDao invoiceDao;
 
 	@Inject
 	private FacesContext facesContext;
+	
+	private List<ParkingInvoice> invoiceList;
 
-	private List<ParkingRegister> parkingList;
-
-	public void calculateInvoice() throws Exception {
+	public String calculateInvoice(List<ParkingRegister> parkingList) {
 		try {
 			invoiceService.generateInvoice(parkingList);
 			facesContext.addMessage(null,
@@ -33,18 +47,31 @@ public class InvoiceBean {
 					"Generation Unsuccessful");
 			facesContext.addMessage(null, m);
 		}
+		return findInvoicesCustomer(parkingList.get(0).getCustomer());
+	}
+	
+	public String findInvoicesCustomer(Customer customer) {
+		if (customer != null) {
+			invoiceList = invoiceDao.findAllRegitersByCustomer(customer);
+
+			if(invoiceList.isEmpty()){
+				facesContext.addMessage(null,
+						new FacesMessage(FacesMessage.SEVERITY_INFO, "No Data for Selected User.", ""));
+			}
+			return "invoices";
+		} else {
+			facesContext.addMessage(null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "User Invalid. Please select a User", ""));
+		}
+
+		return "";
 	}
 
-	@PostConstruct
-	public void initNewMember() {
-		parkingList = new ArrayList<ParkingRegister>();
+	public List<ParkingInvoice> getInvoiceList() {
+		return invoiceList;
 	}
 
-	public List<ParkingRegister> getParkingList() {
-		return parkingList;
-	}
-
-	public void setParkingList(List<ParkingRegister> parkingList) {
-		this.parkingList = parkingList;
+	public void setInvoiceList(List<ParkingInvoice> invoiceList) {
+		this.invoiceList = invoiceList;
 	}
 }

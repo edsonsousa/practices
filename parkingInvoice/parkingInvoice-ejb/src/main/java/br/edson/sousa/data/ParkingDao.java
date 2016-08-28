@@ -42,16 +42,6 @@ public class ParkingDao {
 			}
 		}
 		return result;
-
-	}
-
-	public List<Customer> findAllCustomers() {
-		List<Customer> result = new ArrayList<Customer>();
-		for (ParkingRegister parkingRegister : parkingList) {
-			result.add(parkingRegister.getCustomer());
-		}
-		return result;
-
 	}
 
 	public List<ParkingRegister> getAll() {

@@ -4,15 +4,14 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 <h:head>
-	<title>${rootArtifactId}</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<h:outputStylesheet name="css/screen.css" />
+	<title>Parking System</title>
+ <h:outputStylesheet name="css/screen.css" />
 </h:head>
 <h:body>
 	<div id="container">
 
 		<div id="content">
-			<div style="width: 100%; margin: 0 auto; padding: 10px;">
+			<div style="width: 80%; margin: 0 auto; padding: 10px;">
 				<div
 					style="float: left; background-color: #FFF; width: 25%; border: 1px solid #666; padding: 3px;">
 					<ui:insert name="menu">
@@ -21,19 +20,12 @@
 				</div>
 				<div
 					style="float: right; background-color: #FFF; border: 1px solid #666; width: 70%; height: 70%">
-					<h:messages id="idMessage" showDetail="true" autoUpdate="true"
-						closable="true" showSummary="false" escape="false"
-						redisplay="false" />
+					<h:messages id="idMessage" errorStyle="color:red"
+						infoStyle="color:orange" />
 					<ui:insert name="content" />
 				</div>
 				<div style="clear: both;"></div>
 			</div>
-		</div>
-
-		<div id="footer">
-			<p>
-				This project was generated from a Maven archetype from JBoss.<br />
-			</p>
 		</div>
 	</div>
 </h:body>

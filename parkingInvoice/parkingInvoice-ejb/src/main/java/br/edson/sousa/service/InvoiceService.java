@@ -12,6 +12,7 @@ import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
 import br.edson.sousa.data.InvoiceDao;
+import br.edson.sousa.data.ParkingDao;
 import br.edson.sousa.exception.ParkingException;
 import br.edson.sousa.model.ParkingInvoice;
 import br.edson.sousa.model.ParkingRegister;
@@ -21,6 +22,8 @@ public class InvoiceService {
 
 	@Inject
 	private InvoiceDao invoiceDao;
+	
+	@Inject ParkingDao parkingDao;
 
 	@Inject
 	private Event<List<ParkingInvoice>> invoiceEvent;
@@ -32,11 +35,13 @@ public class InvoiceService {
 		for (ParkingRegister parkingRegister : parkingList) {
 			parkingRegister.setParkingValueCalculated(calculateParkingRegister(parkingRegister));
 			parkingRegister.setDateValueCalculated(invoiceDate);
+			//parkingDao.updateValue(parkingRegister);
 			totalInvoice.add(parkingRegister.getParkingValueCalculated());
 		}
 		ParkingInvoice invoice = new ParkingInvoice();
 		invoice.setDateGenerated(invoiceDate);
 		invoice.setTotalInvoice(totalInvoice);
+		invoice.setCustomer(parkingList.get(0).getCustomer());
 		invoiceDao.registerInvoice(invoice);
 		List<ParkingInvoice> invoices = new ArrayList<ParkingInvoice>();
 
@@ -47,12 +52,16 @@ public class InvoiceService {
 		// validate if parkingList has same customer
 
 		// validate if all registers has the dates
+		
+		//validate if parkingRegister isn't used in another Invoice
 
 	}
 
 	private BigDecimal calculateParkingRegister(ParkingRegister parkingRegister) {
-		// TODO Auto-generated method stub
-		return null;
+
+		long time = parkingRegister.getFinishParking().getTime() - parkingRegister.getStartParking().getTime();
+		long diffMinutes = time / (60 * 1000) % 60;
+		return new BigDecimal((diffMinutes*.75)+5);
 	}
 
 	// não tá considerando o dia dos objetos abaixo com os passados

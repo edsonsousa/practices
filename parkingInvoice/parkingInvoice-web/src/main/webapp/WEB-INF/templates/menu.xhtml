@@ -3,37 +3,40 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
 
-	<h:panelGroup>
-		<div style="margin: 0 auto;">
-			<div style="float: left;">
-				<h:outputLabel value="Customers: "
-					style="font:bold 16px arial,georgia,sans-serif" />
-				<h:outputText rendered="#{empty customers}">
-					<em>No registered Customers.</em>
-				</h:outputText>
-			</div>
+	<h:form>
+		<div>
+			<h:outputLabel value="Customers: "
+				style="font:bold 12px arial,georgia,sans-serif" />
 
-			<h:selectOneMenu styleClass="form-control"
-				rendered="#{not empty customers}" id="customersDrop"
-				value="#{customerBean.customerSelected}">
-				<f:selectItem id="idCustomerSelect" itemLabel="" itemValue="" />
-				<f:selectItems id="idCustomers" value="#{customers}" var="customer"
+			<h:selectOneMenu styleClass="form-control" id="customersDrop"
+				value="#{customerSelected}"
+				converter="#{customerConverter}">
+				<f:selectItem id="idCustomerSelect" itemLabel="Select a Customer"
+					itemValue="" />
+				<f:selectItems id="idCustomers"
+					value="#{customers}" var="customer"
 					itemLabel="#{customer.name}" itemValue="#{customer}" />
+				<f:ajax listener="#{customerBean.valueChangedCustomerSelected}" />
 			</h:selectOneMenu>
-
-			<h:form>
-				<div>
-					<br />
-					<h:commandLink value="Parking Info" action="#{parkingBean.findParkingLogCustomer(customerBean.customerSelected)}"
-						style="font:bold 14px arial,georgia,sans-serif">
-					</h:commandLink>
-					<br />
-					<h:commandLink value="Invoices"
-						style="font:bold 14px arial,georgia,sans-serif">
-					</h:commandLink>
-				</div>
-			</h:form>
 		</div>
-	</h:panelGroup>
+	</h:form>
+
+
+	<h:form>
+
+		<div>
+			<br />
+			<h:commandLink value="Parking Info"
+				action="#{parkingBean.findParkingLogCustomer(customerSelected)}"
+				style="font:bold 14px arial,georgia,sans-serif">
+			</h:commandLink>
+			<br />
+			<h:commandLink value="Invoices"
+				action="#{invoiceBean.findInvoicesCustomer(customerSelected)}"
+				style="font:bold 14px arial,georgia,sans-serif">
+			</h:commandLink>
+		</div>
+	</h:form>
+
 
 </ui:fragment>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	template="/WEB-INF/templates/default.xhtml">
+	<ui:define name="content">
+		<h1>Customer Parking Log</h1>
+
+		<h:panelGroup rendered="#{not empty parkingBean.parkingLog}">
+			<h:dataTable value="#{parkingBean.parkingLog}" var="parking"
+				styleClass="simpletablestyle">
+
+				<h:column>
+					<f:facet name="header">Id</f:facet>
+    				#{parking.id}
+    			</h:column>
+
+				<h:column>
+					<f:facet name="header">Company</f:facet>
+    				#{parking.company.name}
+    			</h:column>
+
+				<h:column>
+					<f:facet name="header">Start</f:facet>
+    				#{parking.startParking} 
+    			</h:column>
+
+				<h:column>
+					<f:facet name="header">Finish</f:facet>
+    				#{parking.finishParking} 
+    			</h:column>
+
+				<h:column>
+					<f:facet name="header">Value</f:facet>
+    				#{parking.parkingValueCalculated}
+    			</h:column>
+
+			</h:dataTable>
+			<h:form>
+				<h:commandButton id="generateInvoice"
+					action="#{invoiceBean.calculateInvoice(parkingBean.parkingLog)}"
+					value="Generate Invoice" styleClass="register" />
+			</h:form>
+		</h:panelGroup>
+
+	</ui:define>
+</ui:composition>

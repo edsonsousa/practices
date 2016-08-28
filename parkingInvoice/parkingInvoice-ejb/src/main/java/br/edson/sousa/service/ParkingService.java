@@ -7,10 +7,12 @@ import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
+import br.edson.sousa.data.CompanyDao;
 import br.edson.sousa.data.CustomerDao;
 import br.edson.sousa.data.ParkingDao;
 import br.edson.sousa.exception.ParkingException;
 import br.edson.sousa.model.Customer;
+import br.edson.sousa.model.ParkingCompany;
 import br.edson.sousa.model.ParkingRegister;
 
 @Stateless
@@ -25,10 +27,20 @@ public class ParkingService {
 	@Inject
 	private CustomerDao customerDao;
 
+	@Inject
+	private CompanyDao companyDao;
+
+	@Inject
+	private CustomerService customerService;
+
+	@Inject
+	private CompanyService companyService;
+
 	public void registerParking(ParkingRegister parkingRegister) throws Exception {
 
 		log.info("Registering " + parkingRegister.getCustomer().getName());
-		parkingRegister.setCustomer(insertCustomer(parkingRegister.getCustomer()));
+		parkingRegister.setCustomer(findOrinsertCustomer(parkingRegister.getCustomer()));
+		parkingRegister.setCompany(findOrinsertCompany(parkingRegister.getCompany()));
 		parkingDao.registerParking(parkingRegister);
 
 	}
@@ -49,12 +61,24 @@ public class ParkingService {
 	 *         value
 	 * @throws ParkingException
 	 */
-	private Customer insertCustomer(Customer customer) throws ParkingException {
+	private Customer findOrinsertCustomer(Customer customer) throws ParkingException {
 		Customer result = customer;
 		if (customer != null && customer.getName() != null) {
 			result = customerDao.findByName(customer.getName());
 			if (result == null) {
-				return customerDao.registerCustomer(customer);
+				return customerService.registerCustomer(customer);
+			}
+		}
+		return result;
+	}
+
+
+	private ParkingCompany findOrinsertCompany(ParkingCompany company) throws ParkingException {
+		ParkingCompany result = company;
+		if (company != null && company.getName() != null) {
+			result = companyDao.findByName(company.getName());
+			if (result == null) {
+				return companyService.registerCompany(company);
 			}
 		}
 		return result;

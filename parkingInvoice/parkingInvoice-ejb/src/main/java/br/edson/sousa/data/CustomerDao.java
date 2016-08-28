@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
 
 import br.edson.sousa.exception.ParkingException;
 import br.edson.sousa.model.Customer;
@@ -27,19 +29,50 @@ import br.edson.sousa.model.Customer;
 @ApplicationScoped
 public class CustomerDao {
 
+	@Inject
+	EntityManager em;
+
 	List<Customer> customerList = new ArrayList<Customer>();
+
 
 	public Customer findById(Long id) {
 		return customerList.get(findIndexById(id));
 	}
 
 	public List<Customer> getAll() {
-
+		if(customerList.isEmpty()){
+			Customer c = new Customer();
+			c.setName("edson");
+			c.setEmail("fsdsfd@gmail.com");
+			c.setPremium(false);
+			c.setCarPlate("dfsdfd");
+			try {
+				registerCustomer(c);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		return customerList;
 	}
 
-	public Customer findByName(String nome) {
-		return customerList.get(findIndexByName(nome));
+	public Customer findByName(String name) {
+		
+//		CriteriaBuilder cb = em.getCriteriaBuilder();
+//        CriteriaQuery<Customer> criteria = cb.createQuery(Customer.class);
+//        Root<Customer> customer = criteria.from(Customer.class);
+//
+//        criteria.select(customer).where(cb.equal(customer.get("name"), name));
+//        try {
+//        	 return em.createQuery(criteria).getSingleResult();
+//		} catch (NoResultException e) {
+//			return null;
+//		}
+       
+		if(!customerList.isEmpty()){
+			return customerList.get(findIndexByName(name));
+		}
+		return null;
 	}
 
 	public int findIndexByName(final String name) {
@@ -60,6 +93,8 @@ public class CustomerDao {
 		}
 		customer.setId(Long.valueOf(id));
 		customerList.add(customer);
+//		em.persist(customer);
+//		em.flush();
 		return customer;
 	}
 

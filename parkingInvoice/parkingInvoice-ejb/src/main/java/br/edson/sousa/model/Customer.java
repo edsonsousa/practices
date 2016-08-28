@@ -51,9 +51,6 @@ public class Customer implements Serializable {
 	@Email
 	private String email;
 
-	@OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<ParkingRegister> parkingList;
-
 	@NotNull
 	@Column(name = "car_plate")
 	private String carPlate;

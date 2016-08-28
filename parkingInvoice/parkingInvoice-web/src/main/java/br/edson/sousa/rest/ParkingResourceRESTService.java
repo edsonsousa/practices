@@ -16,6 +16,7 @@
  */
 package br.edson.sousa.rest;
 
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -121,10 +122,6 @@ public class ParkingResourceRESTService {
 			builder = Response.ok();
 		} catch (ConstraintViolationException ce) {
 			builder = createViolationResponse(ce.getConstraintViolations());
-		} catch (ValidationException e) {
-			Map<String, String> responseObj = new HashMap<String, String>();
-			responseObj.put("email", "Email taken");
-			builder = Response.status(Response.Status.CONFLICT).entity(responseObj);
 		} catch (Exception e) {
 			Map<String, String> responseObj = new HashMap<String, String>();
 			responseObj.put("error", e.getMessage());
@@ -172,11 +169,6 @@ public class ParkingResourceRESTService {
 		if (!violations.isEmpty()) {
 			throw new ConstraintViolationException(new HashSet<ConstraintViolation<?>>(violations));
 		}
-
-		// Check the uniqueness of the email address
-		if (customerNameExists(parkingRegister.getCustomer().getName())) {
-			throw new ValidationException("Unique Customer Name Violation");
-		}
 	}
 
 	public boolean customerNameExists(String name) {
@@ -187,6 +179,16 @@ public class ParkingResourceRESTService {
 			// ignore
 		}
 		return customer != null;
+	}
+	
+	@GET
+	@Path("/verify")
+	@Produces(MediaType.TEXT_PLAIN)
+	public Response verifyRESTService(InputStream incomingData) {
+		String result = "Successfully started..";
+ 
+		// return HTTP response 200 in case of success
+		return Response.status(200).entity(result).build();
 	}
 
 }
