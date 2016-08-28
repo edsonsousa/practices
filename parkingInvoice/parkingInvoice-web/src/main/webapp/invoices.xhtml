@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	template="/WEB-INF/templates/default.xhtml">
+	<ui:define name="content">
+		<h1>Invoices</h1>
+
+		<h:panelGroup rendered="#{not empty invoiceBean.invoiceList}">
+			<h:dataTable value="#{invoiceBean.invoiceList}" var="invoice" styleClass="simpletablestyle">
+
+				<h:column>
+					<f:facet name="header">Id</f:facet>
+    				#{invoice.id}
+    			</h:column>
+
+				<h:column>
+					<f:facet name="header">Date</f:facet>
+    				#{invoice.dateGenerated}
+    			</h:column>
+    			
+    			<h:column>
+					<f:facet name="header">Company</f:facet>
+    				#{invoice.company.name}
+    			</h:column>
+
+				<h:column>
+					<f:facet name="header">Total</f:facet>
+    				#{invoice.totalInvoice} 
+    			</h:column>
+    			
+				<h:column>
+					<f:facet name="header">Detail</f:facet>
+    				
+    			</h:column>
+
+				
+
+			</h:dataTable>
+		</h:panelGroup>
+
+	</ui:define>
+</ui:composition>

@@ -46,7 +46,7 @@ public class InvoiceTestArquillian {
 		List<ParkingRegister> listParking = new ArrayList<ParkingRegister>();
 		ParkingRegister parkingRegister = TestUtil.createParkingRegister(false, 30);
 		listParking.add(parkingRegister);
-		List<ParkingInvoice> listInvoice = invoiceService.generateInvoice(listParking);
+		List<ParkingInvoice> listInvoice = invoiceService.generateInvoice(TestUtil.createCustomer());
 		assertNotNull(listInvoice);
 		assertTrue(listInvoice.size() == 1);
 		assertNotNull(listInvoice.get(0).getDateGenerated());

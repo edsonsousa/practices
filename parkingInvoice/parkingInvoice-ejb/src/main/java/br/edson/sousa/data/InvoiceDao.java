@@ -50,7 +50,7 @@ public class InvoiceDao {
 		return invoices;
 	}
 
-	public void registerInvoice(ParkingInvoice invoice) throws ParkingException {
+	public ParkingInvoice registerInvoice(ParkingInvoice invoice) throws ParkingException {
 		Long id = 0L;
 		if (invoices.size() > 0) {
 			id = invoices.get(invoices.size() - 1).getId();
@@ -58,6 +58,7 @@ public class InvoiceDao {
 		}
 		invoice.setId(Long.valueOf(id));
 		invoices.add(invoice);
+		return invoice;
 
 	}
 

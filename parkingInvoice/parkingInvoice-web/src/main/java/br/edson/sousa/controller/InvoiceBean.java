@@ -37,9 +37,9 @@ public class InvoiceBean implements Serializable {
 	
 	private List<ParkingInvoice> invoiceList;
 
-	public String calculateInvoice(List<ParkingRegister> parkingList) {
+	public String calculateInvoice(Customer customer) {
 		try {
-			invoiceService.generateInvoice(parkingList);
+			invoiceService.generateInvoice(customer);
 			facesContext.addMessage(null,
 					new FacesMessage(FacesMessage.SEVERITY_INFO, "Generated!", "Generation successful"));
 		} catch (Exception e) {
@@ -47,7 +47,7 @@ public class InvoiceBean implements Serializable {
 					"Generation Unsuccessful");
 			facesContext.addMessage(null, m);
 		}
-		return findInvoicesCustomer(parkingList.get(0).getCustomer());
+		return findInvoicesCustomer(customer);
 	}
 	
 	public String findInvoicesCustomer(Customer customer) {

@@ -69,4 +69,20 @@ public class ParkingDao {
 		}
 		return index;
 	}
+
+	/**
+	 * Get list of {@link ParkingRegister} not used in invoices.
+	 * @param customer
+	 * @return {@link ParkingRegister}
+	 */
+	public List<ParkingRegister> findAllRegitersWithoutInvoiceByCustomer(Customer customer) {
+		List<ParkingRegister> result = new ArrayList<ParkingRegister>();
+		for (ParkingRegister parkingRegister : parkingList) {
+			if (parkingRegister.getCustomer().getName().equals(customer.getName()) 
+					&& parkingRegister.getDateValueCalculated() == null) {
+				result.add(parkingRegister);
+			}
+		}
+		return result;
+	}
 }

@@ -31,7 +31,7 @@ public class InvoiceTest {
 	public void testGenerateInvoice1ParkingRegister30Min() throws Exception {
 		List<ParkingRegister> listParking = new ArrayList<ParkingRegister>();
 		listParking.add(TestUtil.createParkingRegister(true, 30));
-		List<ParkingInvoice> listInvoice = invoiceService.generateInvoice(listParking);
+		List<ParkingInvoice> listInvoice = invoiceService.generateInvoice(TestUtil.createCustomer());
 		assertNotNull(listInvoice);
 		assertTrue(listInvoice.size() == 1);
 		assertNotNull(listParking.get(0).getDateValueCalculated());
@@ -46,7 +46,7 @@ public class InvoiceTest {
 	public void testGenerateInvoice1inParkingRegister29M() throws Exception {
 		List<ParkingRegister> listParking = new ArrayList<ParkingRegister>();
 		listParking.add(TestUtil.createParkingRegister(true, 29));
-		List<ParkingInvoice> listInvoice = invoiceService.generateInvoice(listParking);
+		List<ParkingInvoice> listInvoice = invoiceService.generateInvoice(TestUtil.createCustomer());
 		assertNotNull(listInvoice);
 		assertTrue(listInvoice.size() == 1);
 		assertNotNull(listParking.get(0).getDateValueCalculated());
@@ -61,7 +61,7 @@ public class InvoiceTest {
 	public void testGenerateInvoice1ParkingRegister31Min() throws Exception {
 		List<ParkingRegister> listParking = new ArrayList<ParkingRegister>();
 		listParking.add(TestUtil.createParkingRegister(true, 31));
-		List<ParkingInvoice> listInvoice = invoiceService.generateInvoice(listParking);
+		List<ParkingInvoice> listInvoice = invoiceService.generateInvoice(TestUtil.createCustomer());
 		assertNotNull(listInvoice);
 		assertTrue(listInvoice.size() == 1);
 		assertNotNull(listParking.get(0).getDateValueCalculated());
@@ -77,7 +77,7 @@ public class InvoiceTest {
 		List<ParkingRegister> listParking = new ArrayList<ParkingRegister>();
 		listParking.add(TestUtil.createParkingRegister(true, 31));
 		listParking.add(TestUtil.createParkingRegister(true, 31));
-		List<ParkingInvoice> listInvoice = invoiceService.generateInvoice(listParking);
+		List<ParkingInvoice> listInvoice = invoiceService.generateInvoice(TestUtil.createCustomer());
 		assertNotNull(listInvoice);
 		assertTrue(listInvoice.size() == 1);
 		assertNotNull(listParking.get(0).getDateValueCalculated());

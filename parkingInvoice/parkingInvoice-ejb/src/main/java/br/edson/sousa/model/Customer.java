@@ -52,10 +52,6 @@ public class Customer implements Serializable {
 	private String email;
 
 	@NotNull
-	@Column(name = "car_plate")
-	private String carPlate;
-
-	@NotNull
 	private Boolean premium;
 
 	public Long getId() {
@@ -80,14 +76,6 @@ public class Customer implements Serializable {
 
 	public void setEmail(String email) {
 		this.email = email;
-	}
-
-	public String getCarPlate() {
-		return carPlate;
-	}
-
-	public void setCarPlate(String carPlate) {
-		this.carPlate = carPlate;
 	}
 
 	public Boolean getPremium() {

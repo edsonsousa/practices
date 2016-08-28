@@ -6,8 +6,10 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -40,6 +42,11 @@ public class ParkingInvoice implements Serializable {
 
 	@OneToMany
 	private List<ParkingRegister> parkingRegisters;
+	
+	@NotNull
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_company", referencedColumnName = "id", nullable = false)
+	private ParkingCompany company;
 
 	@NotNull
 	private Date dateGenerated;
@@ -85,6 +92,14 @@ public class ParkingInvoice implements Serializable {
 
 	public void setTotalInvoice(BigDecimal totalInvoice) {
 		this.totalInvoice = totalInvoice;
+	}
+
+	public ParkingCompany getCompany() {
+		return company;
+	}
+
+	public void setCompany(ParkingCompany company) {
+		this.company = company;
 	}
 
 }

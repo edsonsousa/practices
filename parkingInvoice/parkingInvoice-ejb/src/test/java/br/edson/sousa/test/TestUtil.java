@@ -36,7 +36,6 @@ public class TestUtil {
 		customer.setId(1L);
 		customer.setName("nameCustomer");
 		customer.setEmail("asd@ghl.com");
-		customer.setCarPlate("HHH7777");
 		customer.setPremium(false);
 		return customer;
 	}

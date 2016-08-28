@@ -39,7 +39,7 @@
 			</h:dataTable>
 			<h:form>
 				<h:commandButton id="generateInvoice"
-					action="#{invoiceBean.calculateInvoice(parkingBean.parkingLog)}"
+					action="#{invoiceBean.calculateInvoice(customerSelected)}"
 					value="Generate Invoice" styleClass="register" />
 			</h:form>
 		</h:panelGroup>

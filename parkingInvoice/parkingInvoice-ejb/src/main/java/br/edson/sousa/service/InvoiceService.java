@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -14,6 +15,8 @@ import javax.inject.Inject;
 import br.edson.sousa.data.InvoiceDao;
 import br.edson.sousa.data.ParkingDao;
 import br.edson.sousa.exception.ParkingException;
+import br.edson.sousa.model.Customer;
+import br.edson.sousa.model.ParkingCompany;
 import br.edson.sousa.model.ParkingInvoice;
 import br.edson.sousa.model.ParkingRegister;
 
@@ -22,39 +25,60 @@ public class InvoiceService {
 
 	@Inject
 	private InvoiceDao invoiceDao;
-	
+
 	@Inject ParkingDao parkingDao;
 
 	@Inject
 	private Event<List<ParkingInvoice>> invoiceEvent;
 
-	public List<ParkingInvoice> generateInvoice(List<ParkingRegister> parkingList) throws ParkingException {
-		validateParkingRegisters(parkingList);
-		BigDecimal totalInvoice = new BigDecimal(0);
-		Date invoiceDate = new Date();
-		for (ParkingRegister parkingRegister : parkingList) {
-			parkingRegister.setParkingValueCalculated(calculateParkingRegister(parkingRegister));
-			parkingRegister.setDateValueCalculated(invoiceDate);
-			//parkingDao.updateValue(parkingRegister);
-			totalInvoice.add(parkingRegister.getParkingValueCalculated());
-		}
-		ParkingInvoice invoice = new ParkingInvoice();
-		invoice.setDateGenerated(invoiceDate);
-		invoice.setTotalInvoice(totalInvoice);
-		invoice.setCustomer(parkingList.get(0).getCustomer());
-		invoiceDao.registerInvoice(invoice);
-		List<ParkingInvoice> invoices = new ArrayList<ParkingInvoice>();
+	public List<ParkingInvoice> generateInvoice(Customer customer) throws ParkingException {
 
-		return invoices;
+		List<ParkingRegister> parkingList = parkingDao.findAllRegitersWithoutInvoiceByCustomer(customer);
+		List<ParkingInvoice> invoices = new ArrayList<ParkingInvoice>();
+		if(parkingList != null && !parkingList.isEmpty()){
+
+			//create lists per company
+			HashMap<ParkingCompany, List<ParkingRegister>> mapInvoicesCompany = createParkingListPerCompany(parkingList);
+
+			BigDecimal totalInvoice = new BigDecimal(0);
+			Date invoiceDate = new Date();
+			ParkingInvoice invoice;
+			
+			for (ParkingCompany company : mapInvoicesCompany.keySet()) {
+				for (ParkingRegister parkingRegister : mapInvoicesCompany.get(company)) {
+					parkingRegister.setParkingValueCalculated(calculateParkingRegister(parkingRegister));
+					parkingRegister.setDateValueCalculated(invoiceDate);
+					totalInvoice.add(parkingRegister.getParkingValueCalculated());
+				}
+				invoice = new ParkingInvoice();
+				invoice.setDateGenerated(invoiceDate);
+				invoice.setTotalInvoice(totalInvoice);
+				invoice.setCustomer(customer);
+				invoice.setCompany(company);
+				invoices.add(invoiceDao.registerInvoice(invoice));
+			}
+
+			return invoices;
+
+		}else{
+			throw new ParkingException("Customer has no pending Parking.");
+		}
 	}
 
-	private void validateParkingRegisters(List<ParkingRegister> parkingList) throws ParkingException {
-		// validate if parkingList has same customer
+	private HashMap<ParkingCompany, List<ParkingRegister>> createParkingListPerCompany(List<ParkingRegister> parkingList){
+		HashMap<ParkingCompany, List<ParkingRegister>> mapInvoicesCompany = new HashMap<ParkingCompany, List<ParkingRegister>>();
+		for (ParkingRegister parkingRegister : parkingList) {
 
-		// validate if all registers has the dates
-		
-		//validate if parkingRegister isn't used in another Invoice
+			if(!mapInvoicesCompany.containsKey(parkingRegister.getCompany())){
+				List<ParkingRegister> parkingListCompany = new ArrayList<ParkingRegister>();
+				parkingListCompany.add(parkingRegister);
+				mapInvoicesCompany.put(parkingRegister.getCompany(),parkingListCompany);
+			}else{
+				mapInvoicesCompany.get(parkingRegister.getCompany()).add(parkingRegister);
+			}
+		}
 
+		return mapInvoicesCompany;
 	}
 
 	private BigDecimal calculateParkingRegister(ParkingRegister parkingRegister) {

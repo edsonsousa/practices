@@ -1,6 +1,7 @@
 
 package br.edson.sousa.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -17,6 +18,8 @@ import br.edson.sousa.model.ParkingRegister;
 
 @Stateless
 public class ParkingService {
+
+	private static final String PARKING_REGISTER_FAILED = "Parking Register failed: ";
 
 	@Inject
 	private Logger log;
@@ -36,13 +39,41 @@ public class ParkingService {
 	@Inject
 	private CompanyService companyService;
 
-	public void registerParking(ParkingRegister parkingRegister) throws Exception {
+	public void registerParking(ParkingRegister parkingRegister) throws ParkingException {
 
 		log.info("Registering " + parkingRegister.getCustomer().getName());
 		parkingRegister.setCustomer(findOrinsertCustomer(parkingRegister.getCustomer()));
 		parkingRegister.setCompany(findOrinsertCompany(parkingRegister.getCompany()));
+		validateParkingRegister(parkingRegister);
 		parkingDao.registerParking(parkingRegister);
 
+	}
+
+	private void validateParkingRegister(ParkingRegister parkingRegister) throws ParkingException {
+		if(parkingRegister == null){
+			throw new ParkingException(PARKING_REGISTER_FAILED + "Register null");
+		}
+
+		if(parkingRegister.getCustomer() == null || parkingRegister.getCustomer().getId() == null){
+			throw new ParkingException(PARKING_REGISTER_FAILED + "Customer null");
+		}
+
+		if(parkingRegister.getStartParking() == null || parkingRegister.getStartParking().after(new Date())){
+			throw new ParkingException(PARKING_REGISTER_FAILED + "Start date invalid");
+		}
+
+		if(parkingRegister.getStartParking() == null || parkingRegister.getFinishParking().before(parkingRegister.getStartParking())){
+			throw new ParkingException(PARKING_REGISTER_FAILED + "Finish date invalid");
+		}
+		if(parkingRegister.getCompany() == null){
+			throw new ParkingException(PARKING_REGISTER_FAILED + "Parking House null");
+		}
+
+		if(parkingRegister.getDateValueCalculated() != null){
+			throw new ParkingException(PARKING_REGISTER_FAILED + "Register invalid");
+		}
+		
+		//Could we make more validations here
 	}
 
 	public void addListParkingRegister(List<ParkingRegister> parkingList) throws Exception {

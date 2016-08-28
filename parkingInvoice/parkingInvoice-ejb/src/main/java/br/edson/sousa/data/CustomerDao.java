@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
@@ -33,7 +34,8 @@ public class CustomerDao {
 	EntityManager em;
 
 	List<Customer> customerList = new ArrayList<Customer>();
-
+	@Inject
+	private Event<Customer> customerEventSrc;
 
 	public Customer findById(Long id) {
 		return customerList.get(findIndexById(id));
@@ -42,10 +44,9 @@ public class CustomerDao {
 	public List<Customer> getAll() {
 		if(customerList.isEmpty()){
 			Customer c = new Customer();
-			c.setName("edson");
-			c.setEmail("fsdsfd@gmail.com");
+			c.setName("Peter");
+			c.setEmail("peter@gmail.com");
 			c.setPremium(false);
-			c.setCarPlate("dfsdfd");
 			try {
 				registerCustomer(c);
 			} catch (Exception e) {
@@ -57,32 +58,26 @@ public class CustomerDao {
 	}
 
 	public Customer findByName(String name) {
-		
-//		CriteriaBuilder cb = em.getCriteriaBuilder();
-//        CriteriaQuery<Customer> criteria = cb.createQuery(Customer.class);
-//        Root<Customer> customer = criteria.from(Customer.class);
-//
-//        criteria.select(customer).where(cb.equal(customer.get("name"), name));
-//        try {
-//        	 return em.createQuery(criteria).getSingleResult();
-//		} catch (NoResultException e) {
-//			return null;
-//		}
-       
-		if(!customerList.isEmpty()){
-			return customerList.get(findIndexByName(name));
-		}
-		return null;
-	}
 
-	public int findIndexByName(final String name) {
-		int index = 0;
-		for (int i = 0; i < customerList.size(); i++) {
-			if (customerList.get(i).getName().contains(name)) {
-				index = i;
+		//		CriteriaBuilder cb = em.getCriteriaBuilder();
+		//        CriteriaQuery<Customer> criteria = cb.createQuery(Customer.class);
+		//        Root<Customer> customer = criteria.from(Customer.class);
+		//
+		//        criteria.select(customer).where(cb.equal(customer.get("name"), name));
+		//        try {
+		//        	 return em.createQuery(criteria).getSingleResult();
+		//		} catch (NoResultException e) {
+		//			return null;
+		//		}
+
+		if(!customerList.isEmpty()){
+			for (int i = 0; i < customerList.size(); i++) {
+				if (customerList.get(i).getName().equals(name)) {
+					return customerList.get(i);
+				}
 			}
 		}
-		return index;
+		return null;
 	}
 
 	public Customer registerCustomer(Customer customer) throws ParkingException {
@@ -93,8 +88,9 @@ public class CustomerDao {
 		}
 		customer.setId(Long.valueOf(id));
 		customerList.add(customer);
-//		em.persist(customer);
-//		em.flush();
+		//		em.persist(customer);
+		//		em.flush();
+		customerEventSrc.fire(customer);
 		return customer;
 	}
 
