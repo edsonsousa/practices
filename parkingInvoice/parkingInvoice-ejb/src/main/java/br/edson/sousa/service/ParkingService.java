@@ -41,7 +41,7 @@ public class ParkingService {
 
 	public void registerParking(ParkingRegister parkingRegister) throws ParkingException {
 
-		log.info("Registering " + parkingRegister.getCustomer().getName());
+		log.info("Registering " + parkingRegister.toString());
 		parkingRegister.setCustomer(findOrinsertCustomer(parkingRegister.getCustomer()));
 		parkingRegister.setCompany(findOrinsertCompany(parkingRegister.getCompany()));
 		validateParkingRegister(parkingRegister);

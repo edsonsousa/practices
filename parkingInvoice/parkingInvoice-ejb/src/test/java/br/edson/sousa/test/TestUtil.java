@@ -1,9 +1,12 @@
 package br.edson.sousa.test;
 
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 
 import br.edson.sousa.model.Customer;
+import br.edson.sousa.model.ParkingCompany;
+import br.edson.sousa.model.ParkingInvoice;
 import br.edson.sousa.model.ParkingRegister;
 
 public class TestUtil {
@@ -27,7 +30,7 @@ public class TestUtil {
 		calendar.add(Calendar.MINUTE, minutesParking);
 
 		parkingRegister.setFinishParking(calendar.getTime());
-		System.out.println(parkingRegister.getStartParking() + " - " + parkingRegister.getFinishParking());
+		parkingRegister.setCompany(createCompany());
 		return parkingRegister;
 	}
 
@@ -38,5 +41,23 @@ public class TestUtil {
 		customer.setEmail("asd@ghl.com");
 		customer.setPremium(false);
 		return customer;
+	}
+	
+	public static ParkingCompany createCompany() {
+		ParkingCompany company = new ParkingCompany();
+		company.setId(1L);
+		company.setName("nameCustomer");
+		return company;
+	}
+
+	public static ParkingInvoice createInvoice() {
+		ParkingInvoice invoice = new ParkingInvoice();
+		invoice.setId(1L);
+		invoice.setCompany(createCompany());
+		invoice.setCustomer(createCustomer());
+		invoice.setDateGenerated(new Date());
+		invoice.setMonthYearReference("09/15");
+		invoice.setTotalInvoice(new BigDecimal(0));
+		return invoice;
 	}
 }

@@ -2,13 +2,22 @@
     <wb-module deploy-name="parkingInvoice-ear">
         <wb-resource deploy-path="/" source-path="/target/m2e-wtp/ear-resources"/>
         <wb-resource deploy-path="/" source-path="/src/main/application" tag="defaultRootSource"/>
-        <dependent-module archiveName="parkingInvoice-web.war" deploy-path="/" handle="module:/classpath/var/M2_REPO/br/edson/sousa/parkingInvoice-web/1.0-SNAPSHOT/parkingInvoice-web-1.0-SNAPSHOT.war">
+        <dependent-module archiveName="parkingInvoice-web.war" deploy-path="/" handle="module:/resource/parkingInvoice-web/parkingInvoice-web">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <dependent-module archiveName="parkingInvoice-ejb.jar" deploy-path="/" handle="module:/resource/parkingInvoice-ejb/parkingInvoice-ejb">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <dependent-module archiveName="mockito-all.jar" deploy-path="/lib" handle="module:/classpath/var/M2_REPO/org/mockito/mockito-all/1.9.5/mockito-all-1.9.5.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="jackson-databind.jar" deploy-path="/lib" handle="module:/classpath/var/M2_REPO/com/fasterxml/jackson/core/jackson-databind/2.6.3/jackson-databind-2.6.3.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="jackson-annotations.jar" deploy-path="/lib" handle="module:/classpath/var/M2_REPO/com/fasterxml/jackson/core/jackson-annotations/2.6.0/jackson-annotations-2.6.0.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="jackson-core.jar" deploy-path="/lib" handle="module:/classpath/var/M2_REPO/com/fasterxml/jackson/core/jackson-core/2.6.3/jackson-core-2.6.3.jar">
             <dependency-type>uses</dependency-type>
         </dependent-module>
     </wb-module>

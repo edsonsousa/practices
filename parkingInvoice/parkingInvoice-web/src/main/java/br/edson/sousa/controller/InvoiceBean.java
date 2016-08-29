@@ -39,7 +39,7 @@ public class InvoiceBean implements Serializable {
 
 	public String calculateInvoice(Customer customer) {
 		try {
-			invoiceService.generateInvoice(customer);
+			invoiceService.generateInvoiceCustomer(customer);
 			facesContext.addMessage(null,
 					new FacesMessage(FacesMessage.SEVERITY_INFO, "Generated!", "Generation successful"));
 		} catch (Exception e) {

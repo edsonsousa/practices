@@ -43,6 +43,7 @@ import javax.ws.rs.core.Response;
 
 import br.edson.sousa.data.CustomerDao;
 import br.edson.sousa.data.ParkingDao;
+import br.edson.sousa.exception.ParkingException;
 import br.edson.sousa.model.Customer;
 import br.edson.sousa.model.ParkingRegister;
 import br.edson.sousa.service.ParkingService;
@@ -91,13 +92,16 @@ public class ParkingResourceRESTService {
 	@GET
 	@Path("/customerparkinglog/{name}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<ParkingRegister> lookupParkingLogByCustomerName(@PathParam("name") String name) {
+	public List<ParkingRegister> lookupParkingLogByCustomerName(@PathParam("name") String name) throws ParkingException {
 		Customer customer = customerDao.findByName(name);
-		List<ParkingRegister> parkingList = parkingDao.findAllRegitersByCustomer(customer);
-		if (parkingList == null) {
-			throw new WebApplicationException(Response.Status.NOT_FOUND);
+		if(customer != null){
+			List<ParkingRegister> parkingList = parkingDao.findAllRegitersByCustomer(customer);
+			if (parkingList == null) {
+				throw new WebApplicationException(Response.Status.NOT_FOUND);
+			}
+			return parkingList;
 		}
-		return parkingList;
+		throw new ParkingException("Customer not Found");
 	}
 
 	/**
@@ -114,7 +118,7 @@ public class ParkingResourceRESTService {
 		Response.ResponseBuilder builder = null;
 
 		try {
-			// Validates member using bean validation
+			// Validates using bean validation
 			validateParkingRegister(parkingRegister);
 
 			parkingService.registerParking(parkingRegister);
@@ -180,13 +184,13 @@ public class ParkingResourceRESTService {
 		}
 		return customer != null;
 	}
-	
+
 	@GET
 	@Path("/verify")
 	@Produces(MediaType.TEXT_PLAIN)
 	public Response verifyRESTService(InputStream incomingData) {
 		String result = "Successfully started..";
- 
+
 		// return HTTP response 200 in case of success
 		return Response.status(200).entity(result).build();
 	}

@@ -21,7 +21,6 @@ import br.edson.sousa.model.Customer;
 import br.edson.sousa.model.ParkingInvoice;
 import br.edson.sousa.model.ParkingRegister;
 import br.edson.sousa.service.InvoiceService;
-import br.edson.sousa.service.TempoCalculado;
 import br.edson.sousa.util.Resources;
 
 @RunWith(Arquillian.class)
@@ -31,7 +30,7 @@ public class InvoiceTestArquillian {
 	public static Archive<?> createTestArchive() {
 		return ShrinkWrap.create(WebArchive.class, "test.war")
 				.addClasses(Customer.class, ParkingRegister.class, InvoiceService.class, ParkingInvoice.class,
-						TestUtil.class, Resources.class, TempoCalculado.class)
+						TestUtil.class, Resources.class)
 				.addAsResource("META-INF/test-persistence.xml", "META-INF/persistence.xml")
 				.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
 				// Deploy our test datasource
@@ -46,7 +45,7 @@ public class InvoiceTestArquillian {
 		List<ParkingRegister> listParking = new ArrayList<ParkingRegister>();
 		ParkingRegister parkingRegister = TestUtil.createParkingRegister(false, 30);
 		listParking.add(parkingRegister);
-		List<ParkingInvoice> listInvoice = invoiceService.generateInvoice(TestUtil.createCustomer());
+		List<ParkingInvoice> listInvoice = invoiceService.generateInvoiceCustomer(TestUtil.createCustomer());
 		assertNotNull(listInvoice);
 		assertTrue(listInvoice.size() == 1);
 		assertNotNull(listInvoice.get(0).getDateGenerated());

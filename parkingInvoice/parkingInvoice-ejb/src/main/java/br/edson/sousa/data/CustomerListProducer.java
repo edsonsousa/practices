@@ -27,7 +27,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import br.edson.sousa.model.Customer;
-import br.edson.sousa.model.Member;
 
 @RequestScoped
 public class CustomerListProducer {

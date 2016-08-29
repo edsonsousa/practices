@@ -6,7 +6,6 @@ br/edson/sousa/data/CustomerListProducer.class
 br/edson/sousa/model/Member.class
 br/edson/sousa/service/CompanyService.class
 br/edson/sousa/service/CustomerService.class
-br/edson/sousa/data/ParkingRegisterListProducer.class
 br/edson/sousa/model/Customer.class
 br/edson/sousa/model/ParkingInvoice.class
 br/edson/sousa/exception/ParkingException.class

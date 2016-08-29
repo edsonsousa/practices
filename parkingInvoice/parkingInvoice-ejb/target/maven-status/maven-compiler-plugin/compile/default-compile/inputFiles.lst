@@ -4,7 +4,6 @@
 /home/edson/git/practices/parkingInvoice/parkingInvoice-ejb/src/main/java/br/edson/sousa/data/ParkingDao.java
 /home/edson/git/practices/parkingInvoice/parkingInvoice-ejb/src/main/java/br/edson/sousa/model/ParkingRegister.java
 /home/edson/git/practices/parkingInvoice/parkingInvoice-ejb/src/main/java/br/edson/sousa/service/MemberRegistration.java
-/home/edson/git/practices/parkingInvoice/parkingInvoice-ejb/src/main/java/br/edson/sousa/data/ParkingRegisterListProducer.java
 /home/edson/git/practices/parkingInvoice/parkingInvoice-ejb/src/main/java/br/edson/sousa/service/CustomerService.java
 /home/edson/git/practices/parkingInvoice/parkingInvoice-ejb/src/main/java/br/edson/sousa/model/Member.java
 /home/edson/git/practices/parkingInvoice/parkingInvoice-ejb/src/main/java/br/edson/sousa/service/TempoCalculado.java
