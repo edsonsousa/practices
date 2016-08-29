@@ -3,6 +3,7 @@ package br.edson.sousa.test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
@@ -52,8 +53,6 @@ public class InvoiceTest {
 		Customer customer = listParking.get(0).getCustomer();
 		when(parkingDao.findAllRegitersWithoutInvoiceByCustomer(customer)).thenReturn(listParking);
 
-		ParkingInvoice invoice = TestUtil.createInvoice();
-		when(invoiceDao.registerInvoice(invoice)).thenReturn(invoice);
 		List<ParkingInvoice> listInvoice = invoiceService.generateInvoiceCustomer(customer);
 		assertNotNull(listInvoice);
 		assertTrue(listInvoice.size() == 1);
@@ -62,6 +61,9 @@ public class InvoiceTest {
 		assertNotNull(listInvoice.get(0).getDateGenerated());
 		assertNotNull(listInvoice.get(0).getTotalInvoice());
 		assertEquals(new BigDecimal(1.5), listInvoice.get(0).getTotalInvoice());
+
+		verify(parkingDao).findAllRegitersWithoutInvoiceByCustomer(customer);
+
 	}
 
 	@Test
@@ -75,8 +77,6 @@ public class InvoiceTest {
 		customer.setPremium(true);
 		when(parkingDao.findAllRegitersWithoutInvoiceByCustomer(customer)).thenReturn(listParking);
 
-		ParkingInvoice invoice = TestUtil.createInvoice();
-		when(invoiceDao.registerInvoice(invoice)).thenReturn(invoice);
 		List<ParkingInvoice> listInvoice = invoiceService.generateInvoiceCustomer(customer);
 		assertNotNull(listInvoice);
 		assertTrue(listInvoice.size() == 1);
@@ -85,6 +85,8 @@ public class InvoiceTest {
 		assertNotNull(listInvoice.get(0).getDateGenerated());
 		assertNotNull(listInvoice.get(0).getTotalInvoice());
 		assertEquals(new BigDecimal(21), listInvoice.get(0).getTotalInvoice());
+
+		verify(parkingDao).findAllRegitersWithoutInvoiceByCustomer(customer);
 	}
 
 	@Test
@@ -95,8 +97,6 @@ public class InvoiceTest {
 		Customer customer = listParking.get(0).getCustomer();
 		when(parkingDao.findAllRegitersWithoutInvoiceByCustomer(customer)).thenReturn(listParking);
 
-		ParkingInvoice invoice = TestUtil.createInvoice();
-		when(invoiceDao.registerInvoice(invoice)).thenReturn(invoice);
 		List<ParkingInvoice> listInvoice = invoiceService.generateInvoiceCustomer(customer);
 		assertNotNull(listInvoice);
 		assertTrue(listInvoice.size() == 1);
@@ -105,6 +105,8 @@ public class InvoiceTest {
 		assertNotNull(listInvoice.get(0).getDateGenerated());
 		assertNotNull(listInvoice.get(0).getTotalInvoice());
 		assertEquals(new BigDecimal(1.5), listInvoice.get(0).getTotalInvoice());
+
+		verify(parkingDao).findAllRegitersWithoutInvoiceByCustomer(customer);
 	}
 
 	@Test
@@ -115,8 +117,6 @@ public class InvoiceTest {
 		Customer customer = listParking.get(0).getCustomer();
 		when(parkingDao.findAllRegitersWithoutInvoiceByCustomer(customer)).thenReturn(listParking);
 
-		ParkingInvoice invoice = TestUtil.createInvoice();
-		when(invoiceDao.registerInvoice(invoice)).thenReturn(invoice);
 		List<ParkingInvoice> listInvoice = invoiceService.generateInvoiceCustomer(customer);
 		assertNotNull(listInvoice);
 		assertTrue(listInvoice.size() == 1);
@@ -125,6 +125,8 @@ public class InvoiceTest {
 		assertNotNull(listInvoice.get(0).getDateGenerated());
 		assertNotNull(listInvoice.get(0).getTotalInvoice());
 		assertEquals(new BigDecimal(3), listInvoice.get(0).getTotalInvoice());
+
+		verify(parkingDao).findAllRegitersWithoutInvoiceByCustomer(customer);
 	}
 
 	@Test
@@ -148,8 +150,6 @@ public class InvoiceTest {
 		Customer customer = listParking.get(0).getCustomer();
 		when(parkingDao.findAllRegitersWithoutInvoiceByCustomer(customer)).thenReturn(listParking);
 
-		ParkingInvoice invoice = TestUtil.createInvoice();
-		when(invoiceDao.registerInvoice(invoice)).thenReturn(invoice);
 		List<ParkingInvoice> listInvoice = invoiceService.generateInvoiceCustomer(customer);
 		assertNotNull(listInvoice);
 		assertTrue(listInvoice.size() == 1);
@@ -158,6 +158,8 @@ public class InvoiceTest {
 		assertNotNull(listInvoice.get(0).getDateGenerated());
 		assertNotNull(listInvoice.get(0).getTotalInvoice());
 		assertEquals(new BigDecimal(6), listInvoice.get(0).getTotalInvoice());
+
+		verify(parkingDao).findAllRegitersWithoutInvoiceByCustomer(customer);
 	}
 
 	@Test
@@ -182,8 +184,6 @@ public class InvoiceTest {
 		customer.setPremium(true);
 		when(parkingDao.findAllRegitersWithoutInvoiceByCustomer(customer)).thenReturn(listParking);
 
-		ParkingInvoice invoice = TestUtil.createInvoice();
-		when(invoiceDao.registerInvoice(invoice)).thenReturn(invoice);
 		List<ParkingInvoice> listInvoice = invoiceService.generateInvoiceCustomer(customer);
 		assertNotNull(listInvoice);
 		assertTrue(listInvoice.size() == 1);
@@ -192,6 +192,8 @@ public class InvoiceTest {
 		assertNotNull(listInvoice.get(0).getDateGenerated());
 		assertNotNull(listInvoice.get(0).getTotalInvoice());
 		assertEquals(new BigDecimal(25), listInvoice.get(0).getTotalInvoice());
+
+		verify(parkingDao).findAllRegitersWithoutInvoiceByCustomer(customer);
 	}
 
 	@Test
@@ -221,8 +223,6 @@ public class InvoiceTest {
 		Customer customer = listParking.get(0).getCustomer();
 		when(parkingDao.findAllRegitersWithoutInvoiceByCustomer(customer)).thenReturn(listParking);
 
-		ParkingInvoice invoice = TestUtil.createInvoice();
-		when(invoiceDao.registerInvoice(invoice)).thenReturn(invoice);
 		List<ParkingInvoice> listInvoice = invoiceService.generateInvoiceCustomer(customer);
 		assertNotNull(listInvoice);
 		assertTrue(listInvoice.size() == 1);
@@ -231,6 +231,8 @@ public class InvoiceTest {
 		assertNotNull(listInvoice.get(0).getDateGenerated());
 		assertNotNull(listInvoice.get(0).getTotalInvoice());
 		assertEquals(new BigDecimal(10), listInvoice.get(0).getTotalInvoice());
+
+		verify(parkingDao).findAllRegitersWithoutInvoiceByCustomer(customer);
 	}
 
 	@Test
@@ -260,8 +262,6 @@ public class InvoiceTest {
 		Customer customer = listParking.get(0).getCustomer();
 		when(parkingDao.findAllRegitersWithoutInvoiceByCustomer(customer)).thenReturn(listParking);
 
-		ParkingInvoice invoice = TestUtil.createInvoice();
-		when(invoiceDao.registerInvoice(invoice)).thenReturn(invoice);
 		List<ParkingInvoice> listInvoice = invoiceService.generateInvoiceCustomer(customer);
 		assertNotNull(listInvoice);
 		assertTrue(listInvoice.size() == 1);
@@ -270,6 +270,8 @@ public class InvoiceTest {
 		assertNotNull(listInvoice.get(0).getDateGenerated());
 		assertNotNull(listInvoice.get(0).getTotalInvoice());
 		assertEquals(new BigDecimal(35.5), listInvoice.get(0).getTotalInvoice());
+
+		verify(parkingDao).findAllRegitersWithoutInvoiceByCustomer(customer);
 	}
 
 	@Test
@@ -299,8 +301,6 @@ public class InvoiceTest {
 		Customer customer = listParking.get(0).getCustomer();
 		when(parkingDao.findAllRegitersWithoutInvoiceByCustomer(customer)).thenReturn(listParking);
 
-		ParkingInvoice invoice = TestUtil.createInvoice();
-		when(invoiceDao.registerInvoice(invoice)).thenReturn(invoice);
 		List<ParkingInvoice> listInvoice = invoiceService.generateInvoiceCustomer(customer);
 		assertNotNull(listInvoice);
 		assertTrue(listInvoice.size() == 1);
@@ -309,6 +309,8 @@ public class InvoiceTest {
 		assertNotNull(listInvoice.get(0).getDateGenerated());
 		assertNotNull(listInvoice.get(0).getTotalInvoice());
 		assertEquals(new BigDecimal(6), listInvoice.get(0).getTotalInvoice());
+
+		verify(parkingDao).findAllRegitersWithoutInvoiceByCustomer(customer);
 	}
 
 	@Test
@@ -338,8 +340,6 @@ public class InvoiceTest {
 		Customer customer = listParking.get(0).getCustomer();
 		when(parkingDao.findAllRegitersWithoutInvoiceByCustomer(customer)).thenReturn(listParking);
 
-		ParkingInvoice invoice = TestUtil.createInvoice();
-		when(invoiceDao.registerInvoice(invoice)).thenReturn(invoice);
 		List<ParkingInvoice> listInvoice = invoiceService.generateInvoiceCustomer(customer);
 		assertNotNull(listInvoice);
 		assertTrue(listInvoice.size() == 1);
@@ -348,6 +348,8 @@ public class InvoiceTest {
 		assertNotNull(listInvoice.get(0).getDateGenerated());
 		assertNotNull(listInvoice.get(0).getTotalInvoice());
 		assertEquals(new BigDecimal(5), listInvoice.get(0).getTotalInvoice());
+
+		verify(parkingDao).findAllRegitersWithoutInvoiceByCustomer(customer);
 	}
 
 	@Test
@@ -398,8 +400,6 @@ public class InvoiceTest {
 		Customer customer = listParking.get(0).getCustomer();
 		when(parkingDao.findAllRegitersWithoutInvoiceByCustomer(customer)).thenReturn(listParking);
 
-		ParkingInvoice invoice = TestUtil.createInvoice();
-		when(invoiceDao.registerInvoice(invoice)).thenReturn(invoice);
 		List<ParkingInvoice> listInvoice = invoiceService.generateInvoiceCustomer(customer);
 		assertNotNull(listInvoice);
 		assertTrue(listInvoice.size() == 1);
@@ -408,6 +408,8 @@ public class InvoiceTest {
 		assertNotNull(listInvoice.get(0).getDateGenerated());
 		assertNotNull(listInvoice.get(0).getTotalInvoice());
 		assertEquals(new BigDecimal(11), listInvoice.get(0).getTotalInvoice());
+
+		verify(parkingDao).findAllRegitersWithoutInvoiceByCustomer(customer);
 	}
 
 	@Test
@@ -424,8 +426,6 @@ public class InvoiceTest {
 		when(parkingDao.findAllRegitersWithoutInvoiceByCustomer(listParking.get(0).getCustomer()))
 				.thenReturn(listParking);
 
-		ParkingInvoice invoice = TestUtil.createInvoice();
-		when(invoiceDao.registerInvoice(invoice)).thenReturn(invoice);
 		List<ParkingInvoice> listInvoice = invoiceService.generateInvoiceCustomer(listParking.get(0).getCustomer());
 		assertNotNull(listInvoice);
 		assertTrue(listInvoice.size() == 1);
@@ -434,6 +434,8 @@ public class InvoiceTest {
 		assertNotNull(listInvoice.get(0).getDateGenerated());
 		assertNotNull(listInvoice.get(0).getTotalInvoice());
 		assertEquals(new BigDecimal(38.25), listInvoice.get(0).getTotalInvoice());
+
+		verify(parkingDao).findAllRegitersWithoutInvoiceByCustomer(listParking.get(0).getCustomer());
 	}
 
 	@Test
@@ -445,7 +447,7 @@ public class InvoiceTest {
 	}
 
 	@Test
-	public void testGenerateInvoiceParking2Companies() throws ParkingException {
+	public void testGenerateInvoiceParkingMoreThan1Month() throws ParkingException {
 
 		// Regular customer parks four times a month
 		// 08:12 – 10:45 (6 * 1.5 = 9.00 EUR) - Company A
@@ -473,8 +475,6 @@ public class InvoiceTest {
 		when(parkingDao.findAllRegitersWithoutInvoiceByCustomer(listParking.get(0).getCustomer()))
 				.thenReturn(listParking);
 
-		ParkingInvoice invoice = TestUtil.createInvoice();
-		when(invoiceDao.registerInvoice(invoice)).thenReturn(invoice);
 		List<ParkingInvoice> listInvoice = invoiceService.generateInvoiceCustomer(listParking.get(0).getCustomer());
 		assertNotNull(listInvoice);
 		assertTrue(listInvoice.size() == 2);
@@ -487,12 +487,16 @@ public class InvoiceTest {
 		assertNotNull(listParking.get(1).getParkingValueCalculated());
 		assertNotNull(listInvoice.get(1).getDateGenerated());
 		assertNotNull(listInvoice.get(1).getTotalInvoice());
-		assertEquals(new BigDecimal(18), listInvoice.get(0).getTotalInvoice());
-		assertEquals(new BigDecimal(9), listInvoice.get(1).getTotalInvoice());
+		assertTrue(new BigDecimal(9).equals(listInvoice.get(0).getTotalInvoice())
+				|| new BigDecimal(9).equals(listInvoice.get(1).getTotalInvoice()));
+		assertTrue(new BigDecimal(18).equals(listInvoice.get(0).getTotalInvoice())
+				|| new BigDecimal(18).equals(listInvoice.get(1).getTotalInvoice()));
+
+		verify(parkingDao).findAllRegitersWithoutInvoiceByCustomer(listParking.get(0).getCustomer());
 	}
 
 	@Test
-	public void testGenerateInvoiceParkingMoreThan1Month() throws ParkingException {
+	public void testGenerateInvoiceParking2Companies() throws ParkingException {
 
 		// Regular customer parks four times a month
 		// 08:12 – 10:45 (6 * 1.5 = 9.00 EUR) - Month A
@@ -509,8 +513,6 @@ public class InvoiceTest {
 		when(parkingDao.findAllRegitersWithoutInvoiceByCustomer(listParking.get(0).getCustomer()))
 				.thenReturn(listParking);
 
-		ParkingInvoice invoice = TestUtil.createInvoice();
-		when(invoiceDao.registerInvoice(invoice)).thenReturn(invoice);
 		List<ParkingInvoice> listInvoice = invoiceService.generateInvoiceCustomer(listParking.get(0).getCustomer());
 		assertNotNull(listInvoice);
 		assertTrue(listInvoice.size() == 2);
@@ -523,11 +525,12 @@ public class InvoiceTest {
 		assertNotNull(listParking.get(1).getParkingValueCalculated());
 		assertNotNull(listInvoice.get(1).getDateGenerated());
 		assertNotNull(listInvoice.get(1).getTotalInvoice());
-		assertEquals(new BigDecimal(9), listInvoice.get(0).getTotalInvoice());
-		assertEquals(new BigDecimal(18), listInvoice.get(1).getTotalInvoice());
-	}
 
-	@Test
-	public void testGenerateInvoiceParkingMoreThan1Month2Companies() throws ParkingException {
+		assertTrue(new BigDecimal(9).equals(listInvoice.get(0).getTotalInvoice())
+				|| new BigDecimal(9).equals(listInvoice.get(1).getTotalInvoice()));
+		assertTrue(new BigDecimal(18).equals(listInvoice.get(0).getTotalInvoice())
+				|| new BigDecimal(18).equals(listInvoice.get(1).getTotalInvoice()));
+
+		verify(parkingDao).findAllRegitersWithoutInvoiceByCustomer(listParking.get(0).getCustomer());
 	}
 }

@@ -107,7 +107,7 @@ public class ParkingService {
 		return false;
 	}
 
-	public void addListParkingRegister(List<ParkingRegister> parkingList) throws Exception {
+	public void addListParkingRegister(List<ParkingRegister> parkingList) throws ParkingException {
 		log.info("Registering " + parkingList.size() + " registers");
 		for (ParkingRegister parkingRegister : parkingList) {
 			registerParking(parkingRegister);
