@@ -31,25 +31,26 @@ import br.edson.sousa.model.Customer;
 @RequestScoped
 public class CustomerListProducer {
 
-    @Inject
-    private CustomerDao customerDao;
+	@Inject
+	private CustomerDao customerDao;
 
-    private List<Customer> customers;
+	private List<Customer> customers;
 
-    // @Named provides access the return value via the EL variable name "members" in the UI (e.g.,
-    // Facelets or JSP view)
-    @Produces
-    @Named
-    public List<Customer> getCustomers() {
-        return customers;
-    }
+	// @Named provides access the return value via the EL variable name
+	// "members" in the UI (e.g.,
+	// Facelets or JSP view)
+	@Produces
+	@Named
+	public List<Customer> getCustomers() {
+		return customers;
+	}
 
-    public void onMemberListChanged(@Observes(notifyObserver = Reception.IF_EXISTS) final Customer customer) {
-        retrieveAllCustomersOrderedByName();
-    }
+	public void onMemberListChanged(@Observes(notifyObserver = Reception.IF_EXISTS) final Customer customer) {
+		retrieveAllCustomersOrderedByName();
+	}
 
-    @PostConstruct
-    public void retrieveAllCustomersOrderedByName() {
-    	customers = customerDao.getAll();
-    }
+	@PostConstruct
+	public void retrieveAllCustomersOrderedByName() {
+		customers = customerDao.getAll();
+	}
 }

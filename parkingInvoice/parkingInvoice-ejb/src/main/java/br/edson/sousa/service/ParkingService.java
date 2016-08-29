@@ -42,38 +42,69 @@ public class ParkingService {
 	public void registerParking(ParkingRegister parkingRegister) throws ParkingException {
 
 		log.info("Registering " + parkingRegister.toString());
-		parkingRegister.setCustomer(findOrinsertCustomer(parkingRegister.getCustomer()));
-		parkingRegister.setCompany(findOrinsertCompany(parkingRegister.getCompany()));
+		try {
+			parkingRegister.setCustomer(findOrinsertCustomer(parkingRegister.getCustomer()));
+			parkingRegister.setCompany(findOrinsertCompany(parkingRegister.getCompany()));
+
+		} catch (ParkingException e) {
+			throw new ParkingException(PARKING_REGISTER_FAILED + e.getMessage());
+		}
 		validateParkingRegister(parkingRegister);
 		parkingDao.registerParking(parkingRegister);
 
 	}
 
 	private void validateParkingRegister(ParkingRegister parkingRegister) throws ParkingException {
-		if(parkingRegister == null){
+		if (parkingRegister == null) {
 			throw new ParkingException(PARKING_REGISTER_FAILED + "Register null");
 		}
 
-		if(parkingRegister.getCustomer() == null || parkingRegister.getCustomer().getId() == null){
+		if (parkingRegister.getCustomer() == null || parkingRegister.getCustomer().getId() == null) {
 			throw new ParkingException(PARKING_REGISTER_FAILED + "Customer null");
 		}
 
-		if(parkingRegister.getStartParking() == null || parkingRegister.getStartParking().after(new Date())){
+		if (parkingRegister.getStartParking() == null || parkingRegister.getStartParking().after(new Date())) {
 			throw new ParkingException(PARKING_REGISTER_FAILED + "Start date invalid");
 		}
 
-		if(parkingRegister.getStartParking() == null || parkingRegister.getFinishParking().before(parkingRegister.getStartParking())){
+		if (parkingRegister.getStartParking() == null
+				|| parkingRegister.getFinishParking().before(parkingRegister.getStartParking())) {
 			throw new ParkingException(PARKING_REGISTER_FAILED + "Finish date invalid");
 		}
-		if(parkingRegister.getCompany() == null){
+		if (parkingRegister.getCompany() == null) {
 			throw new ParkingException(PARKING_REGISTER_FAILED + "Parking House null");
 		}
 
-		if(parkingRegister.getDateValueCalculated() != null){
+		if (parkingRegister.getDateValueCalculated() != null) {
 			throw new ParkingException(PARKING_REGISTER_FAILED + "Register invalid");
 		}
-		
-		//Could we make more validations here
+
+		if (verifyDuplicateRegister(parkingRegister)) {
+			throw new ParkingException(PARKING_REGISTER_FAILED + "Register already inserted");
+		}
+
+		// Could we make more validations here
+	}
+
+	/**
+	 * Verify if register is already registered. Consider company, startParking
+	 * and finishParking
+	 *
+	 * @param parkingRegisterToInsert
+	 * @return true case register is a duplicate.
+	 */
+	private boolean verifyDuplicateRegister(ParkingRegister parkingRegisterToInsert) {
+		List<ParkingRegister> listCustomer = parkingDao
+				.findAllRegitersByCustomer(parkingRegisterToInsert.getCustomer());
+		for (ParkingRegister parking : listCustomer) {
+			if (parking.getCompany().equals(parkingRegisterToInsert.getCompany())) {
+				if (parking.getStartParking().equals(parkingRegisterToInsert.getStartParking())
+						&& parking.getFinishParking().equals(parkingRegisterToInsert.getFinishParking())) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	public void addListParkingRegister(List<ParkingRegister> parkingList) throws Exception {
@@ -102,7 +133,6 @@ public class ParkingService {
 		}
 		return result;
 	}
-
 
 	private ParkingCompany findOrinsertCompany(ParkingCompany company) throws ParkingException {
 		ParkingCompany result = company;

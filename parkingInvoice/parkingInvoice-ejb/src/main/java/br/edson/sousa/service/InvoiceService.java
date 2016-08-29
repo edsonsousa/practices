@@ -28,75 +28,79 @@ public class InvoiceService {
 
 	private static final int UNIT_REFERENCE = 30;
 
-	private static final float VALUE_REGULAR_DAYNIGHT = 1.0f;
+	private static final float VALUE_REGULAR_DAYNIGHT = 1.00f;
 
 	private static final float VALUE_PREMIUM_DAYNIGHT = 0.75f;
 
-	private static final float VALUE_REGULAR_DAYLIGHT = 1.5f;
+	private static final float VALUE_REGULAR_DAYLIGHT = 1.50f;
 
-	private static final float VALUE_PREMIUM_DAYLIGHT = 1.0f;
+	private static final float VALUE_PREMIUM_DAYLIGHT = 1.00f;
 
 	@Inject
 	private InvoiceDao invoiceDao;
 
-	@Inject ParkingDao parkingDao;
+	@Inject
+	ParkingDao parkingDao;
 
 	public List<ParkingInvoice> generateInvoiceCustomer(Customer customer) throws ParkingException {
 
 		List<ParkingRegister> parkingList = parkingDao.findAllRegitersWithoutInvoiceByCustomer(customer);
 		List<ParkingInvoice> invoices = new ArrayList<ParkingInvoice>();
-		if(parkingList != null && !parkingList.isEmpty()){
+		if (parkingList != null && !parkingList.isEmpty()) {
 
-			//create lists per company
-			HashMap<ParkingCompany, List<ParkingRegister>> mapInvoicesCompany = createParkingListPerCompany(parkingList);
+			// create lists per company
+			HashMap<ParkingCompany, List<ParkingRegister>> mapInvoicesCompany = createParkingListPerCompany(
+					parkingList);
 
 			ParkingInvoice invoice;
 
 			for (ParkingCompany company : mapInvoicesCompany.keySet()) {
-				//Isolates Parking Registers per month
-				HashMap<String, List<ParkingRegister>> invoicesPerMonth = returnParkingLogPerMonth(mapInvoicesCompany.get(company));
+				// Isolates Parking Registers per month
+				HashMap<String, List<ParkingRegister>> invoicesPerMonth = returnParkingLogPerMonth(
+						mapInvoicesCompany.get(company));
 				for (String monthYearInvoice : invoicesPerMonth.keySet()) {
-					//Generate invoice of company per Month
+					// Generate invoice of company per Month
 					invoice = generateInvoice(customer, invoicesPerMonth.get(monthYearInvoice));
 					invoice.setCustomer(customer);
 					invoice.setMonthYearReference(monthYearInvoice);
 					invoice.setCompany(company);
-					invoices.add(invoice);
 					invoiceDao.registerInvoice(invoice);
+					invoices.add(invoice);
 				}
 			}
 
 			return invoices;
 
-		}else{
+		} else {
 			throw new ParkingException("Customer has no pending Parking.");
 		}
 	}
 
 	/**
 	 * Generic method to generate Invoice using parameter.
-	 * @param customer 
+	 *
+	 * @param customer
 	 * @param listParking
 	 * @return {@link ParkingInvoice}
 	 */
-	private ParkingInvoice generateInvoice(Customer customer, List<ParkingRegister> listParking){
+	private ParkingInvoice generateInvoice(Customer customer, List<ParkingRegister> listParking) {
 		BigDecimal totalInvoice = new BigDecimal(0);
 		Date invoiceDate = new Date();
-		ParkingInvoice invoice;
+		ParkingInvoice invoice = new ParkingInvoice();
 
 		for (ParkingRegister parkingRegister : listParking) {
 			parkingRegister.setParkingValueCalculated(calculateParkingRegister(parkingRegister));
 			parkingRegister.setDateValueCalculated(invoiceDate);
 			totalInvoice = totalInvoice.add(parkingRegister.getParkingValueCalculated());
+			parkingRegister.setInvoice(invoice);
 		}
-		BigDecimal monthFee = customer.getPremium() ? new BigDecimal(MONTH_FEE_PREMIUM) : new BigDecimal(0); 
+		BigDecimal monthFee = customer.getPremium() ? new BigDecimal(MONTH_FEE_PREMIUM) : new BigDecimal(0);
 		totalInvoice = totalInvoice.add(monthFee);
 
-		if(totalInvoice.compareTo(MAX_VALUE_INVOICE_PREMIUM) == 1){
+		if (totalInvoice.compareTo(MAX_VALUE_INVOICE_PREMIUM) == 1) {
 			totalInvoice = MAX_VALUE_INVOICE_PREMIUM;
 		}
 
-		invoice = new ParkingInvoice();
 		invoice.setDateGenerated(invoiceDate);
 		invoice.setTotalInvoice(totalInvoice);
 
@@ -106,6 +110,7 @@ public class InvoiceService {
 
 	/**
 	 * Generates a HashMap with list of ParkingRegisters per Month/Year
+	 *
 	 * @param parkingList
 	 * @return HashMap with ParkingRegisters per Month/Year
 	 */
@@ -114,14 +119,14 @@ public class InvoiceService {
 		String keyMonth;
 		Calendar cal = Calendar.getInstance();
 		for (ParkingRegister parkingRegister : parkingList) {
-			//TODO Considering only startDate. Could be improved.
+			// TODO Considering only startDate. Could be improved.
 			cal.setTime(parkingRegister.getStartParking());
-			keyMonth = cal.get(Calendar.MONTH) + 1 + "/"+ cal.get(Calendar.YEAR);
-			if(!invoicesPerMonth.containsKey(keyMonth)){
+			keyMonth = cal.get(Calendar.MONTH) + 1 + "/" + cal.get(Calendar.YEAR);
+			if (!invoicesPerMonth.containsKey(keyMonth)) {
 				List<ParkingRegister> parkingListMonthYear = new ArrayList<ParkingRegister>();
 				parkingListMonthYear.add(parkingRegister);
 				invoicesPerMonth.put(keyMonth, parkingListMonthYear);
-			}else{
+			} else {
 				invoicesPerMonth.get(keyMonth).add(parkingRegister);
 			}
 		}
@@ -131,18 +136,20 @@ public class InvoiceService {
 
 	/**
 	 * Generates a HashMap with list of ParkingRegisters per Company
+	 *
 	 * @param parkingList
 	 * @return HashMap with ParkingRegisters per Company
 	 */
-	private HashMap<ParkingCompany, List<ParkingRegister>> createParkingListPerCompany(List<ParkingRegister> parkingList){
+	private HashMap<ParkingCompany, List<ParkingRegister>> createParkingListPerCompany(
+			List<ParkingRegister> parkingList) {
 		HashMap<ParkingCompany, List<ParkingRegister>> mapInvoicesCompany = new HashMap<ParkingCompany, List<ParkingRegister>>();
 		for (ParkingRegister parkingRegister : parkingList) {
 
-			if(!mapInvoicesCompany.containsKey(parkingRegister.getCompany())){
+			if (!mapInvoicesCompany.containsKey(parkingRegister.getCompany())) {
 				List<ParkingRegister> parkingListCompany = new ArrayList<ParkingRegister>();
 				parkingListCompany.add(parkingRegister);
-				mapInvoicesCompany.put(parkingRegister.getCompany(),parkingListCompany);
-			}else{
+				mapInvoicesCompany.put(parkingRegister.getCompany(), parkingListCompany);
+			} else {
 				mapInvoicesCompany.get(parkingRegister.getCompany()).add(parkingRegister);
 			}
 		}
@@ -150,61 +157,69 @@ public class InvoiceService {
 		return mapInvoicesCompany;
 	}
 
-	public BigDecimal calculateParkingRegister(ParkingRegister parkingRegister){
+	public BigDecimal calculateParkingRegister(ParkingRegister parkingRegister) {
 
 		if (parkingRegister.getFinishParking().after(parkingRegister.getStartParking())) {
 
-			if(verifyStartAndFinishSameDay(parkingRegister)){
-				//TODO Here we have fixed values of 7AM and 7PM but we could personalize 
-				//the calculation receiving as parameters coming from company
+			if (verifyStartAndFinishSameDay(parkingRegister)) {
+				// TODO Here we have fixed values of 7AM and 7PM but we could
+				// personalize
+				// the calculation receiving as parameters coming from company
 				Calendar zeroAM = Calendar.getInstance();
 				zeroAM.setTime(parkingRegister.getStartParking());
-				zeroAM.set(Calendar.HOUR_OF_DAY, 0);
-				zeroAM.set(Calendar.MINUTE, 59);
+				zeroAM.set(Calendar.HOUR, 0);
+				zeroAM.set(Calendar.MINUTE, 0);
 				zeroAM.set(Calendar.AM_PM, Calendar.AM);
 
 				Calendar twentyThreeFiftyNine = Calendar.getInstance();
 				twentyThreeFiftyNine.setTime(parkingRegister.getStartParking());
-				twentyThreeFiftyNine.set(Calendar.HOUR_OF_DAY, 11);
+				twentyThreeFiftyNine.set(Calendar.HOUR, 11);
 				twentyThreeFiftyNine.set(Calendar.MINUTE, 59);
 				twentyThreeFiftyNine.set(Calendar.AM_PM, Calendar.PM);
 
 				Calendar sevenAM = Calendar.getInstance();
 				sevenAM.setTime(parkingRegister.getStartParking());
-				sevenAM.set(Calendar.HOUR_OF_DAY, 7);
+				sevenAM.set(Calendar.HOUR, 7);
+				sevenAM.set(Calendar.MINUTE, 0);
 				sevenAM.set(Calendar.AM_PM, Calendar.AM);
 
 				Calendar sevenPM = Calendar.getInstance();
 				sevenPM.setTime(parkingRegister.getStartParking());
-				sevenPM.set(Calendar.HOUR_OF_DAY, 7);
+				sevenPM.set(Calendar.HOUR, 7);
+				sevenPM.set(Calendar.MINUTE, 0);
 				sevenPM.set(Calendar.AM_PM, Calendar.PM);
 
-				//The minutes of DayNight is the sum of minutes between Midnight to 7AM and 7PM until 11:59PM 
-				int minutesDayNight = calculateMinutesParking(parkingRegister.getStartParking(), parkingRegister.getFinishParking(), zeroAM, sevenAM) + 
-						calculateMinutesParking(parkingRegister.getStartParking(), parkingRegister.getFinishParking(), sevenPM, twentyThreeFiftyNine);
-				//The minutes of DayLight are the minutes between 7AM and 7PM
-				int minutesDayLight = calculateMinutesParking(parkingRegister.getStartParking(), parkingRegister.getFinishParking(), sevenAM, sevenPM);
+				// The minutes of DayNight is the sum of minutes between
+				// Midnight to 7AM and 7PM until 11:59PM
+				int minutesDayNight = calculateMinutesParking(parkingRegister.getStartParking(),
+						parkingRegister.getFinishParking(), zeroAM, sevenAM)
+						+ calculateMinutesParking(parkingRegister.getStartParking(), parkingRegister.getFinishParking(),
+								sevenPM, twentyThreeFiftyNine);
+				// The minutes of DayLight are the minutes between 7AM and 7PM
+				int minutesDayLight = calculateMinutesParking(parkingRegister.getStartParking(),
+						parkingRegister.getFinishParking(), sevenAM, sevenPM);
 
-				if(minutesDayLight > 0 || minutesDayNight > 0){
+				if (minutesDayLight > 0 || minutesDayNight > 0) {
 
-					//TODO The values of prices per half hour could be personalized per company 
-					Float valueMinuteDayLight = parkingRegister.getCustomer().getPremium() 
-							? VALUE_PREMIUM_DAYLIGHT : VALUE_REGULAR_DAYLIGHT;
-					Float valueMinuteDayNight = parkingRegister.getCustomer().getPremium() 
-							? VALUE_PREMIUM_DAYNIGHT : VALUE_REGULAR_DAYNIGHT;
+					// TODO The values of prices per half hour could be
+					// personalized per company
+					Float valueMinuteDayLight = parkingRegister.getCustomer().getPremium() ? VALUE_PREMIUM_DAYLIGHT
+							: VALUE_REGULAR_DAYLIGHT;
+					Float valueMinuteDayNight = parkingRegister.getCustomer().getPremium() ? VALUE_PREMIUM_DAYNIGHT
+							: VALUE_REGULAR_DAYNIGHT;
 
-					int quantityUnitReferenceDayLight = minutesDayLight % UNIT_REFERENCE > 0 
+					int quantityUnitReferenceDayLight = minutesDayLight % UNIT_REFERENCE > 0
 							? (minutesDayLight / UNIT_REFERENCE) + 1 : minutesDayLight / UNIT_REFERENCE;
-					int quantityUnitReferenceDayNight = minutesDayNight % UNIT_REFERENCE > 0 
+					int quantityUnitReferenceDayNight = minutesDayNight % UNIT_REFERENCE > 0
 							? (minutesDayNight / UNIT_REFERENCE) + 1 : minutesDayNight / UNIT_REFERENCE;
 
-					BigDecimal result = new BigDecimal((quantityUnitReferenceDayLight  * valueMinuteDayLight) + 
-							(quantityUnitReferenceDayNight * valueMinuteDayNight));
+					BigDecimal result = new BigDecimal((quantityUnitReferenceDayLight * valueMinuteDayLight)
+							+ (quantityUnitReferenceDayNight * valueMinuteDayNight));
 
 					return result;
 				}
-			}else{
-				//TODO Calculates when register finish in another day.
+			} else {
+				// TODO Calculates when register finish in another day.
 				return null;
 			}
 		}
@@ -212,36 +227,46 @@ public class InvoiceService {
 	}
 
 	/**
-	 * 
-	 * Calculate how much minutes of parking are between initPeriod and endPeriod 
-	 * @param initParking
+	 *
+	 * Calculate how much minutes of parking are between initPeriod and
+	 * endPeriod
+	 *
+	 * @param startParking
 	 * @param finishParking
 	 * @param initPeriod
 	 * @param endPeriod
 	 * @return Number of minutes of parking are between initPeriod and endPeriod
 	 */
-	private int calculateMinutesParking(Date initParking, Date finishParking, Calendar initPeriod, Calendar endPeriod) {
-		Date minor = null;
+	private int calculateMinutesParking(Date startParking, Date finishParking, Calendar initPeriod,
+			Calendar endPeriod) {
+		Date minorStart = null;
+		Date minorFinish = null;
 		long divisorMinutes = 60 * 1000;
-		//if initParking is equal or later than initPeriod and before the endPeriod
-		if ((initParking.equals(initPeriod.getTime()) || 
-				initParking.after(initPeriod.getTime()) && initParking.before(endPeriod.getTime()))) {
-			// if finishParking hour is early than endPeriod
-			minor = finishParking.before(endPeriod.getTime()) ? finishParking : endPeriod.getTime();
-			return new Long(((minor.getTime() - initParking.getTime()) / divisorMinutes)).intValue();
-		}
 
+		// checks if startParking or finishParking is between Period
+		if (((startParking.equals(initPeriod.getTime()) || startParking.after(initPeriod.getTime()))
+				&& startParking.before(endPeriod.getTime()))
+				|| (finishParking.equals(endPeriod.getTime()) || finishParking.before(endPeriod.getTime()))
+						&& finishParking.after(initPeriod.getTime())) {
+
+			// if startParking hour is early than initPeriod
+			minorStart = startParking.before(initPeriod.getTime()) ? initPeriod.getTime() : startParking;
+			// if finishParking hour is early than endPeriod
+			minorFinish = finishParking.before(endPeriod.getTime()) ? finishParking : endPeriod.getTime();
+			return new Long(((minorFinish.getTime() - minorStart.getTime()) / divisorMinutes)).intValue();
+		}
 		return 0;
+
 	}
 
-	private boolean verifyStartAndFinishSameDay(ParkingRegister parkingRegister){
+	private boolean verifyStartAndFinishSameDay(ParkingRegister parkingRegister) {
 		Calendar cStart = Calendar.getInstance();
 		cStart.setTime(parkingRegister.getStartParking());
 
 		Calendar cFinish = Calendar.getInstance();
 		cFinish.setTime(parkingRegister.getFinishParking());
 
-		return cStart.get(Calendar.DAY_OF_MONTH) == cFinish.get(Calendar.DAY_OF_MONTH) 
+		return cStart.get(Calendar.DAY_OF_MONTH) == cFinish.get(Calendar.DAY_OF_MONTH)
 				&& cStart.get(Calendar.YEAR) == cFinish.get(Calendar.YEAR);
 	}
 

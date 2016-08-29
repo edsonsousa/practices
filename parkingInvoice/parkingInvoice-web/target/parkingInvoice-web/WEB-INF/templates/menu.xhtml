@@ -9,20 +9,16 @@
 				style="font:bold 12px arial,georgia,sans-serif" />
 
 			<h:selectOneMenu styleClass="form-control" id="customersDrop"
-				value="#{customerSelected}"
+				value="#{customerBean.customerSelected}"
 				converter="#{customerConverter}">
 				<f:selectItem id="idCustomerSelect" itemLabel="Select a Customer"
 					itemValue="" />
 				<f:selectItems id="idCustomers"
 					value="#{customers}" var="customer"
 					itemLabel="#{customer.name}" itemValue="#{customer}" />
-				<f:ajax event="change" listener="#{customerBean.valueChangedCustomerSelected}" />
+				<f:ajax process="@this" event="change"  listener="#{customerBean.valueChangedCustomerSelected(customerSelected.name)}" />
 			</h:selectOneMenu>
 		</div>
-	</h:form>
-
-
-	<h:form>
 
 		<div>
 			<br />

@@ -1,7 +1,7 @@
-/home/edson/git/practices/parkingInvoice/parkingInvoice-web/src/main/java/br/edson/sousa/controller/InvoiceBean.java
-/home/edson/git/practices/parkingInvoice/parkingInvoice-web/src/main/java/br/edson/sousa/util/WebResources.java
-/home/edson/git/practices/parkingInvoice/parkingInvoice-web/src/main/java/br/edson/sousa/controller/CustomerConverter.java
-/home/edson/git/practices/parkingInvoice/parkingInvoice-web/src/main/java/br/edson/sousa/rest/ParkingResourceRESTService.java
-/home/edson/git/practices/parkingInvoice/parkingInvoice-web/src/main/java/br/edson/sousa/controller/CustomerBean.java
-/home/edson/git/practices/parkingInvoice/parkingInvoice-web/src/main/java/br/edson/sousa/rest/JaxRsActivator.java
-/home/edson/git/practices/parkingInvoice/parkingInvoice-web/src/main/java/br/edson/sousa/controller/ParkingBean.java
+/home/edson/edson/practices/parkingInvoice/parkingInvoice-web/src/main/java/br/edson/sousa/rest/ParkingResourceRESTService.java
+/home/edson/edson/practices/parkingInvoice/parkingInvoice-web/src/main/java/br/edson/sousa/controller/ParkingBean.java
+/home/edson/edson/practices/parkingInvoice/parkingInvoice-web/src/main/java/br/edson/sousa/rest/JaxRsActivator.java
+/home/edson/edson/practices/parkingInvoice/parkingInvoice-web/src/main/java/br/edson/sousa/controller/CustomerConverter.java
+/home/edson/edson/practices/parkingInvoice/parkingInvoice-web/src/main/java/br/edson/sousa/controller/InvoiceBean.java
+/home/edson/edson/practices/parkingInvoice/parkingInvoice-web/src/main/java/br/edson/sousa/controller/CustomerBean.java
+/home/edson/edson/practices/parkingInvoice/parkingInvoice-web/src/main/java/br/edson/sousa/util/WebResources.java

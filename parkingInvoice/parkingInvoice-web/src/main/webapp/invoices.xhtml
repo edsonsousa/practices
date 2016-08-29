@@ -3,47 +3,97 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
 	template="/WEB-INF/templates/default.xhtml">
 	<ui:define name="content">
 		<h1>Invoices</h1>
 
-		<h:panelGroup rendered="#{not empty invoiceBean.invoiceList}">
-			<h:dataTable value="#{invoiceBean.invoiceList}" var="invoice" styleClass="simpletablestyle">
 
-				<h:column>
-					<f:facet name="header">Id</f:facet>
+		<h:panelGroup rendered="#{not empty invoiceBean.invoiceList}">
+			<h:form>
+				<h:dataTable value="#{invoiceBean.invoiceList}" var="invoice"
+					styleClass="simpletablestyle">
+
+					<h:column>
+						<f:facet name="header">Id</f:facet>
     				#{invoice.id}
     			</h:column>
 
-				<h:column>
-					<f:facet name="header">Date</f:facet>
+					<h:column>
+						<f:facet name="header">Date</f:facet>
     				#{invoice.dateGenerated}
     			</h:column>
-    			
-    			<h:column>
-					<f:facet name="header">Company</f:facet>
+
+					<h:column>
+						<f:facet name="header">Company</f:facet>
     				#{invoice.company.name}
     			</h:column>
-    			
-    			<h:column>
-					<f:facet name="header">Month/Year Reference</f:facet>
+
+					<h:column>
+						<f:facet name="header">Month/Year Reference</f:facet>
     				#{invoice.monthYearReference}
     			</h:column>
 
-				<h:column>
-					<f:facet name="header">Total</f:facet>
-    				#{invoice.totalInvoice} 
-    			</h:column>
-    			
-				<h:column>
-					<f:facet name="header">Detail</f:facet>
-    				
+					<h:column>
+						<f:facet name="header">Total ($)</f:facet>
+    				 #{invoice.totalInvoice} EUR 
     			</h:column>
 
-				
-
-			</h:dataTable>
+					<h:column>
+						<p:commandButton value="Details" process="@this"
+							action="#{invoiceBean.prepareDetailInvoice(invoice)}"
+							update="detail" oncomplete="PF('dlg1').show();" />
+					</h:column>
+				</h:dataTable>
+			</h:form>
 		</h:panelGroup>
 
+		<p:dialog id="detail" header="Detail Invoice" widgetVar="dlg1"
+			resizable="false" modal="true" height="400">
+			<h:form>
+				<div>
+					<h:outputLabel value="Company: "
+						style="font:bold 12px arial,georgia,sans-serif" />
+					<h:outputText value="#{invoiceBean.selectedInvoice.company}" />
+				</div>
+
+				<div>
+					<h:outputLabel value="Date Generated: "
+						style="font:bold 12px arial,georgia,sans-serif" />
+					<h:outputText value="#{invoiceBean.selectedInvoice.dateGenerated}" />
+				</div>
+
+				<div>
+					<h:outputLabel value="Total Invoice: "
+						style="font:bold 12px arial,georgia,sans-serif" />
+					<h:outputText value="#{invoiceBean.selectedInvoice.totalInvoice}" />
+				</div>
+				<h:dataTable value="#{invoiceBean.selectedInvoice.parkingRegisters}"
+					var="parking" styleClass="simpletablestyle">
+
+					<h:column>
+						<f:facet name="header">Id</f:facet>
+    				#{parking.id}
+    			</h:column>
+
+					<h:column>
+						<f:facet name="header">Start</f:facet>
+    				#{parking.startParking} 
+    			</h:column>
+
+					<h:column>
+						<f:facet name="header">Finish</f:facet>
+    				#{parking.finishParking} 
+    			</h:column>
+
+					<h:column>
+						<f:facet name="header">Value</f:facet>
+    				#{parking.parkingValueCalculated}
+    			</h:column>
+				</h:dataTable>
+			</h:form>
+		</p:dialog>
 	</ui:define>
+
+
 </ui:composition>

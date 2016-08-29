@@ -3,7 +3,6 @@ package br.edson.sousa.model;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,7 +10,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -40,9 +38,6 @@ public class ParkingInvoice implements Serializable {
 	@ManyToOne
 	private Customer customer;
 
-	@OneToMany
-	private List<ParkingRegister> parkingRegisters;
-	
 	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_company", referencedColumnName = "id", nullable = false)
@@ -53,7 +48,7 @@ public class ParkingInvoice implements Serializable {
 
 	@NotNull
 	private BigDecimal totalInvoice;
-	
+
 	@NotNull
 	private String monthYearReference;
 
@@ -71,14 +66,6 @@ public class ParkingInvoice implements Serializable {
 
 	public void setCustomer(Customer customer) {
 		this.customer = customer;
-	}
-
-	public List<ParkingRegister> getParkingRegisters() {
-		return parkingRegisters;
-	}
-
-	public void setParkingRegisters(List<ParkingRegister> parkingRegisters) {
-		this.parkingRegisters = parkingRegisters;
 	}
 
 	public Date getDateGenerated() {
@@ -112,7 +99,7 @@ public class ParkingInvoice implements Serializable {
 	public void setMonthYearReference(String monthYearReference) {
 		this.monthYearReference = monthYearReference;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -123,18 +110,23 @@ public class ParkingInvoice implements Serializable {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		ParkingInvoice other = (ParkingInvoice) obj;
 		if (id == null) {
-			if (other.id != null)
+			if (other.id != null) {
 				return false;
-		} else if (!id.equals(other.id))
+			}
+		} else if (!id.equals(other.id)) {
 			return false;
+		}
 		return true;
 	}
 

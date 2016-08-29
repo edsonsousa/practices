@@ -1,7 +1,7 @@
-br/edson/sousa/rest/JaxRsActivator.class
-br/edson/sousa/controller/InvoiceBean.class
-br/edson/sousa/controller/CustomerBean.class
-br/edson/sousa/controller/CustomerConverter.class
-br/edson/sousa/util/WebResources.class
 br/edson/sousa/rest/ParkingResourceRESTService.class
+br/edson/sousa/controller/InvoiceBean.class
+br/edson/sousa/controller/CustomerConverter.class
+br/edson/sousa/controller/CustomerBean.class
+br/edson/sousa/util/WebResources.class
+br/edson/sousa/rest/JaxRsActivator.class
 br/edson/sousa/controller/ParkingBean.class

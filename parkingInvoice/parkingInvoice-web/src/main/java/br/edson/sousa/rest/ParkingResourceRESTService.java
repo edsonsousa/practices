@@ -48,7 +48,7 @@ import br.edson.sousa.model.Customer;
 import br.edson.sousa.model.ParkingRegister;
 import br.edson.sousa.service.ParkingService;
 
-@Path("/customers")
+@Path("/")
 @RequestScoped
 public class ParkingResourceRESTService {
 	@Inject
@@ -88,7 +88,7 @@ public class ParkingResourceRESTService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<ParkingRegister> lookupParkingLogByCustomerName(@PathParam("name") String name) {
 		Customer customer = customerDao.findByName(name);
-		if(customer != null){
+		if (customer != null) {
 			List<ParkingRegister> parkingList = parkingDao.findAllRegitersByCustomer(customer);
 			if (parkingList == null) {
 				throw new WebApplicationException(Response.Status.NOT_FOUND);
@@ -98,11 +98,6 @@ public class ParkingResourceRESTService {
 		throw new WebApplicationException(Response.Status.NOT_FOUND);
 	}
 
-	/**
-	 * Creates a new member from the values provided. Performs validation, and
-	 * will return a JAX-RS response with either 200 ok, or with a map of
-	 * fields, and related errors.
-	 */
 	@POST
 	@Path("/registerParking/")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -112,6 +107,7 @@ public class ParkingResourceRESTService {
 		Response.ResponseBuilder builder = null;
 
 		try {
+
 			// Validates using bean validation
 			validateParkingRegister(parkingRegister);
 
@@ -120,7 +116,7 @@ public class ParkingResourceRESTService {
 			builder = Response.ok();
 		} catch (ConstraintViolationException ce) {
 			builder = createViolationResponse(ce.getConstraintViolations());
-		} catch (Exception e) {
+		} catch (ParkingException e) {
 			Map<String, String> responseObj = new HashMap<String, String>();
 			responseObj.put("error", e.getMessage());
 			builder = Response.status(Response.Status.BAD_REQUEST).entity(responseObj);
@@ -129,15 +125,47 @@ public class ParkingResourceRESTService {
 		return builder.build();
 	}
 
-	/**
-	 * Creates a JAX-RS "Bad Request" response including a map of all violation
-	 * fields, and their message. This can then be used by clients to show
-	 * violations.
-	 *
-	 * @param violations
-	 *            A set of violations that needs to be reported
-	 * @return JAX-RS response containing all violations
-	 */
+	@POST
+	@Path("/registerListParking/")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response registerParking(ParkingRegister[] listParkingRegister) {
+
+		Response.ResponseBuilder builder = null;
+		Map<String, String> responseObj = new HashMap<String, String>();
+
+		// At least 1 register was successful
+		boolean oneSuccess = false;
+		int countSuccess = 0;
+		int countFailed = 0;
+		for (int i = 0; i < listParkingRegister.length; i++) {
+			try {
+
+				// Validates using bean validation
+				validateParkingRegister(listParkingRegister[i]);
+
+				parkingService.registerParking(listParkingRegister[i]);
+
+				oneSuccess = true;
+				countSuccess++;
+			} catch (ConstraintViolationException ce) {
+				builder = createViolationResponse(ce.getConstraintViolations());
+			} catch (ParkingException e) {
+				countFailed++;
+				responseObj.put("ERROR " + countFailed, e.getMessage());
+			}
+		}
+
+		responseObj.put("Registers Successful: " + countSuccess, "Registers Failed: " + countFailed);
+		if (oneSuccess) {
+			builder = Response.ok().entity(responseObj);
+		} else {
+			builder = Response.status(Response.Status.BAD_REQUEST).entity(responseObj);
+		}
+
+		return builder.build();
+	}
+
 	private Response.ResponseBuilder createViolationResponse(Set<ConstraintViolation<?>> violations) {
 		log.fine("Validation completed. violations found: " + violations.size());
 

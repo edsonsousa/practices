@@ -55,8 +55,13 @@ public class ParkingRegister implements Serializable {
 	private BigDecimal parkingValueCalculated;
 
 	private Date dateValueCalculated;
-	
-	public String toString(){
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_invoice", referencedColumnName = "id", nullable = false)
+	private ParkingInvoice invoice;
+
+	@Override
+	public String toString() {
 		ObjectMapper mapper = new ObjectMapper();
 
 		try {
@@ -65,10 +70,9 @@ public class ParkingRegister implements Serializable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return "";
 	}
-	
 
 	public Long getId() {
 		return id;
@@ -136,20 +140,32 @@ public class ParkingRegister implements Serializable {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		ParkingRegister other = (ParkingRegister) obj;
 		if (id == null) {
-			if (other.id != null)
+			if (other.id != null) {
 				return false;
-		} else if (!id.equals(other.id))
+			}
+		} else if (!id.equals(other.id)) {
 			return false;
+		}
 		return true;
 	}
-	
+
+	public ParkingInvoice getInvoice() {
+		return invoice;
+	}
+
+	public void setInvoice(ParkingInvoice invoice) {
+		this.invoice = invoice;
+	}
 
 }
