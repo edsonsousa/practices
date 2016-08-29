@@ -157,8 +157,9 @@ public class InvoiceTest {
 		assertNotNull(listParking.get(0).getParkingValueCalculated());
 		assertNotNull(listInvoice.get(0).getDateGenerated());
 		assertNotNull(listInvoice.get(0).getTotalInvoice());
-		assertEquals(new BigDecimal(3), listInvoice.get(0).getTotalInvoice());
+		assertEquals(new BigDecimal(6), listInvoice.get(0).getTotalInvoice());
 	}
+
 
 	@Test
 	public void testGenerateInvoice2ParkingRegisterPremium() throws ParkingException {
@@ -191,7 +192,7 @@ public class InvoiceTest {
 		assertNotNull(listParking.get(0).getParkingValueCalculated());
 		assertNotNull(listInvoice.get(0).getDateGenerated());
 		assertNotNull(listInvoice.get(0).getTotalInvoice());
-		assertEquals(new BigDecimal(23), listInvoice.get(0).getTotalInvoice());
+		assertEquals(new BigDecimal(25), listInvoice.get(0).getTotalInvoice());
 	}
 
 	@Test
@@ -237,5 +238,17 @@ public class InvoiceTest {
 	}
 	@Test
 	public void testGenerateInvoiceParkingGreaterThan300NoPremium() throws ParkingException {
+	}
+	
+	@Test
+	public void testGenerateInvoiceParking2Companies() throws ParkingException {
+	}
+	
+	@Test
+	public void testGenerateInvoiceParkingMoreThan1Month() throws ParkingException {
+	}
+	
+	@Test
+	public void testGenerateInvoiceParkingMoreThan1Month2Companies() throws ParkingException {
 	}
 }

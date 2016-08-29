@@ -1,6 +1,4 @@
-/home/edson/git/practices/parkingInvoice/parkingInvoice-web/src/main/java/br/edson/sousa/controller/MemberController.java
 /home/edson/git/practices/parkingInvoice/parkingInvoice-web/src/main/java/br/edson/sousa/controller/InvoiceBean.java
-/home/edson/git/practices/parkingInvoice/parkingInvoice-web/src/main/java/br/edson/sousa/rest/MemberResourceRESTService.java
 /home/edson/git/practices/parkingInvoice/parkingInvoice-web/src/main/java/br/edson/sousa/util/WebResources.java
 /home/edson/git/practices/parkingInvoice/parkingInvoice-web/src/main/java/br/edson/sousa/controller/CustomerConverter.java
 /home/edson/git/practices/parkingInvoice/parkingInvoice-web/src/main/java/br/edson/sousa/rest/ParkingResourceRESTService.java

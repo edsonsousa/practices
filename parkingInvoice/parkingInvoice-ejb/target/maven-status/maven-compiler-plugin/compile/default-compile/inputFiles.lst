@@ -3,13 +3,9 @@
 /home/edson/git/practices/parkingInvoice/parkingInvoice-ejb/src/main/java/br/edson/sousa/service/CompanyService.java
 /home/edson/git/practices/parkingInvoice/parkingInvoice-ejb/src/main/java/br/edson/sousa/data/ParkingDao.java
 /home/edson/git/practices/parkingInvoice/parkingInvoice-ejb/src/main/java/br/edson/sousa/model/ParkingRegister.java
-/home/edson/git/practices/parkingInvoice/parkingInvoice-ejb/src/main/java/br/edson/sousa/service/MemberRegistration.java
 /home/edson/git/practices/parkingInvoice/parkingInvoice-ejb/src/main/java/br/edson/sousa/service/CustomerService.java
-/home/edson/git/practices/parkingInvoice/parkingInvoice-ejb/src/main/java/br/edson/sousa/model/Member.java
-/home/edson/git/practices/parkingInvoice/parkingInvoice-ejb/src/main/java/br/edson/sousa/service/TempoCalculado.java
 /home/edson/git/practices/parkingInvoice/parkingInvoice-ejb/src/main/java/br/edson/sousa/service/InvoiceService.java
 /home/edson/git/practices/parkingInvoice/parkingInvoice-ejb/src/main/java/br/edson/sousa/model/Customer.java
-/home/edson/git/practices/parkingInvoice/parkingInvoice-ejb/src/main/java/br/edson/sousa/data/MemberRepository.java
 /home/edson/git/practices/parkingInvoice/parkingInvoice-ejb/src/main/java/br/edson/sousa/data/CompanyDao.java
 /home/edson/git/practices/parkingInvoice/parkingInvoice-ejb/src/main/java/br/edson/sousa/model/ParkingCompany.java
 /home/edson/git/practices/parkingInvoice/parkingInvoice-ejb/src/main/java/br/edson/sousa/data/InvoiceDao.java

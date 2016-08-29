@@ -48,12 +48,6 @@ import br.edson.sousa.model.Customer;
 import br.edson.sousa.model.ParkingRegister;
 import br.edson.sousa.service.ParkingService;
 
-/**
- * JAX-RS Example
- * <p/>
- * This class produces a RESTful service to read/write the contents of the
- * members table.
- */
 @Path("/customers")
 @RequestScoped
 public class ParkingResourceRESTService {
@@ -92,7 +86,7 @@ public class ParkingResourceRESTService {
 	@GET
 	@Path("/customerparkinglog/{name}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<ParkingRegister> lookupParkingLogByCustomerName(@PathParam("name") String name) throws ParkingException {
+	public List<ParkingRegister> lookupParkingLogByCustomerName(@PathParam("name") String name) {
 		Customer customer = customerDao.findByName(name);
 		if(customer != null){
 			List<ParkingRegister> parkingList = parkingDao.findAllRegitersByCustomer(customer);
@@ -101,7 +95,7 @@ public class ParkingResourceRESTService {
 			}
 			return parkingList;
 		}
-		throw new ParkingException("Customer not Found");
+		throw new WebApplicationException(Response.Status.NOT_FOUND);
 	}
 
 	/**

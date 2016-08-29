@@ -85,7 +85,6 @@ public class InvoiceService {
 		ParkingInvoice invoice;
 
 		for (ParkingRegister parkingRegister : listParking) {
-			totalInvoice = new BigDecimal(0);
 			parkingRegister.setParkingValueCalculated(calculateParkingRegister(parkingRegister));
 			parkingRegister.setDateValueCalculated(invoiceDate);
 			totalInvoice = totalInvoice.add(parkingRegister.getParkingValueCalculated());
@@ -117,7 +116,7 @@ public class InvoiceService {
 		for (ParkingRegister parkingRegister : parkingList) {
 			//TODO Considering only startDate. Could be improved.
 			cal.setTime(parkingRegister.getStartParking());
-			keyMonth = cal.get(Calendar.MONTH) + "/"+ cal.get(Calendar.YEAR);
+			keyMonth = cal.get(Calendar.MONTH) + 1 + "/"+ cal.get(Calendar.YEAR);
 			if(!invoicesPerMonth.containsKey(keyMonth)){
 				List<ParkingRegister> parkingListMonthYear = new ArrayList<ParkingRegister>();
 				parkingListMonthYear.add(parkingRegister);
