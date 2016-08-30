@@ -219,8 +219,36 @@ public class InvoiceService {
 					return result;
 				}
 			} else {
-				// TODO Calculates when register finish in another day.
-				return null;
+				// Calculates when register finish in another day.
+				// Splits the register in 2 and calls this method recursively
+				// adding both results.
+				// First starts at startParking and finish in same day at 23:59
+				// Second start at 00:00 from next day and finish at
+				// finishParking.
+
+				Calendar endDayStartParking = Calendar.getInstance();
+				endDayStartParking.setTime(parkingRegister.getStartParking());
+				endDayStartParking.set(Calendar.HOUR, 11);
+				endDayStartParking.set(Calendar.MINUTE, 59);
+				endDayStartParking.set(Calendar.AM_PM, Calendar.PM);
+
+				Calendar initDayFinishParking = Calendar.getInstance();
+				initDayFinishParking.setTime(parkingRegister.getFinishParking());
+				initDayFinishParking.set(Calendar.HOUR, 0);
+				initDayFinishParking.set(Calendar.MINUTE, 0);
+				initDayFinishParking.set(Calendar.AM_PM, Calendar.AM);
+
+				ParkingRegister startParkingDay = new ParkingRegister();
+				startParkingDay.setStartParking(parkingRegister.getStartParking());
+				startParkingDay.setFinishParking(endDayStartParking.getTime());
+				startParkingDay.setCustomer(parkingRegister.getCustomer());
+
+				ParkingRegister finishParkingDay = new ParkingRegister();
+				finishParkingDay.setStartParking(initDayFinishParking.getTime());
+				finishParkingDay.setFinishParking(parkingRegister.getFinishParking());
+				finishParkingDay.setCustomer(parkingRegister.getCustomer());
+
+				return calculateParkingRegister(startParkingDay).add(calculateParkingRegister(finishParkingDay));
 			}
 		}
 		return new BigDecimal(0);

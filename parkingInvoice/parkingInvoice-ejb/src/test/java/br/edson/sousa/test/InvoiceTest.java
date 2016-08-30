@@ -533,4 +533,90 @@ public class InvoiceTest {
 
 		verify(parkingDao).findAllRegitersWithoutInvoiceByCustomer(listParking.get(0).getCustomer());
 	}
+
+	@Test
+	public void testGenerateInvoice1ParkingFinishingNextDay() throws ParkingException {
+
+		// 08:05 until 08:05 from next day
+		// 22 (08:05 - 19:00) + 3(07:00 - 08:05) * 1.5 = 37.5
+		// 24 (19:00 - 07:00) *1 = 24
+		// 37.7 + 24 = 61.5
+		List<ParkingRegister> listParking = new ArrayList<ParkingRegister>();
+
+		listParking.add(TestUtil.createParkingRegister(true, UNIT_REFERENCE));
+
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(listParking.get(0).getStartParking());
+		calendar.set(Calendar.HOUR, 8);
+		calendar.set(Calendar.MINUTE, 5);
+		calendar.set(Calendar.AM_PM, Calendar.AM);
+
+		listParking.get(0).setStartParking(calendar.getTime());
+
+		calendar = Calendar.getInstance();
+		calendar.setTime(listParking.get(0).getFinishParking());
+		calendar.set(Calendar.HOUR, 8);
+		calendar.set(Calendar.MINUTE, 5);
+		calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH) + 1);
+
+		listParking.get(0).setFinishParking(calendar.getTime());
+
+		Customer customer = listParking.get(0).getCustomer();
+		when(parkingDao.findAllRegitersWithoutInvoiceByCustomer(customer)).thenReturn(listParking);
+
+		List<ParkingInvoice> listInvoice = invoiceService.generateInvoiceCustomer(customer);
+		assertNotNull(listInvoice);
+		assertTrue(listInvoice.size() == 1);
+		assertNotNull(listParking.get(0).getDateValueCalculated());
+		assertNotNull(listParking.get(0).getParkingValueCalculated());
+		assertNotNull(listInvoice.get(0).getDateGenerated());
+		assertNotNull(listInvoice.get(0).getTotalInvoice());
+		assertEquals(new BigDecimal(61.5), listInvoice.get(0).getTotalInvoice());
+
+		verify(parkingDao).findAllRegitersWithoutInvoiceByCustomer(customer);
+
+	}
+
+	@Test
+	public void testGenerateInvoice1ParkingFinishingBefore7AMNextDay() throws ParkingException {
+
+		// 08:05 until 04:05 from next day
+		// 22 (08:05 - 19:00) * 1.5 = 33
+		// 19 (19:00 - 04:05) * 1 = 19
+		// 33 + 19 = 52
+		List<ParkingRegister> listParking = new ArrayList<ParkingRegister>();
+
+		listParking.add(TestUtil.createParkingRegister(true, UNIT_REFERENCE));
+
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(listParking.get(0).getStartParking());
+		calendar.set(Calendar.HOUR, 8);
+		calendar.set(Calendar.MINUTE, 5);
+		calendar.set(Calendar.AM_PM, Calendar.AM);
+
+		listParking.get(0).setStartParking(calendar.getTime());
+
+		calendar = Calendar.getInstance();
+		calendar.setTime(listParking.get(0).getFinishParking());
+		calendar.set(Calendar.HOUR, 4);
+		calendar.set(Calendar.MINUTE, 5);
+		calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH) + 1);
+
+		listParking.get(0).setFinishParking(calendar.getTime());
+
+		Customer customer = listParking.get(0).getCustomer();
+		when(parkingDao.findAllRegitersWithoutInvoiceByCustomer(customer)).thenReturn(listParking);
+
+		List<ParkingInvoice> listInvoice = invoiceService.generateInvoiceCustomer(customer);
+		assertNotNull(listInvoice);
+		assertTrue(listInvoice.size() == 1);
+		assertNotNull(listParking.get(0).getDateValueCalculated());
+		assertNotNull(listParking.get(0).getParkingValueCalculated());
+		assertNotNull(listInvoice.get(0).getDateGenerated());
+		assertNotNull(listInvoice.get(0).getTotalInvoice());
+		assertEquals(new BigDecimal(52), listInvoice.get(0).getTotalInvoice());
+
+		verify(parkingDao).findAllRegitersWithoutInvoiceByCustomer(customer);
+
+	}
 }
