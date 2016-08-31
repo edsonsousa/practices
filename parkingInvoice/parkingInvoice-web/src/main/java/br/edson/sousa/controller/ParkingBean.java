@@ -1,6 +1,7 @@
 package br.edson.sousa.controller;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,5 +60,13 @@ public class ParkingBean implements Serializable{
 	public void setParkingLog(List<ParkingRegister> parkingLog) {
 		this.parkingLog = parkingLog;
 	}
+	
+	public String valueParkingRegister(BigDecimal value){
+		if(value != null){
+			return value + " EUR";
+		}
+		return "";
+	}
+	
 
 }

@@ -50,7 +50,6 @@ public class CustomerDao {
 			try {
 				registerCustomer(c);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

@@ -9,17 +9,21 @@
 		<br />
 		<h2>Commands REST</h2>
 		
-		curl -H "Content-Type: application/json" -X POST -d '{"customer":{"name":"edson", "email":"edskkl@gmail.com", "premium": "false"},"company":{"name": "company", "emailCompany":"companyASD@hgf.com"},"startParking":"2015-10-11T14:45:00", "finishParking":"2015-10-11T16:45:00"}' http://localhost:8080/parkingInvoice-web/rest/customers/registerParking
+		curl -H "Content-Type: application/json" -X POST -d '{"customer":{"name":"edson", "email":"edskkl@gmail.com", "premium": "false"},"company":{"name": "company", "emailCompany":"companyASD@hgf.com"},"startParking":"2015-10-11T14:45:00", "finishParking":"2015-10-11T16:45:00"}' http://localhost:8080/parkingInvoice-web/rest/registerParking
 <br/>
-curl -H "Content-Type: application/json" -X POST -d '{"customer":{"name":"Peter"},"company":{"name": "company"},"startParking":"2015-10-12T14:45:00", "finishParking":"2015-10-12T16:45:00"}' http://localhost:8080/parkingInvoice-web/rest/customers/registerParking
+curl -H "Content-Type: application/json" -X POST -d '{"customer":{"name":"Edson","premium":"true", "email":"dsdas@jkjk.com"},"company":{"name": "company"},"startParking":"2015-10-12T14:45:00", "finishParking":"2015-10-12T16:45:00"}' http://localhost:8080/parkingInvoice-web/rest/registerParking
 <br/>
-curl -H "Content-Type: application/json" -X POST -d '{"customer":{"name":"Peter"},"company":{"name": "company"},"startParking":"2015-09-12T14:45:00", "finishParking":"2015-09-12T16:45:00"}' http://localhost:8080/parkingInvoice-web/rest/customers/registerParking
+curl -H "Content-Type: application/json" -X POST -d '{"customer":{"name":"Peter"},"company":{"name": "company"},"startParking":"2015-09-12T14:45:00", "finishParking":"2015-09-12T16:45:00"}' http://localhost:8080/parkingInvoice-web/rest/registerParking
 <br/>
-curl -H "Content-Type: application/json" -X POST -d '[{"customer":{"name":"Peter"},"company":{"name": "company B"},"startParking":"2015-10-12T14:45:00", "finishParking":"2015-10-12T16:45:00"}, {"customer":{"name":"Peter"},"company":{"name": "company B"},"startParking":"2015-10-12T14:45:00", "finishParking":"2015-10-12T16:45:00"}]' http://localhost:8080/parkingInvoice-web/rest/customers/registerParking
+curl -H "Content-Type: application/json" -X POST -d '[{"customer":{"name":"Peter"},"company":{"name": "company B"},"startParking":"2015-10-12T14:45:00", "finishParking":"2015-10-12T16:45:00"}, {"customer":{"name":"Peter"},"company":{"name": "company B"},"startParking":"2015-10-12T14:45:00", "finishParking":"2015-10-12T16:45:00"}]' http://localhost:8080/parkingInvoice-web/rest/registerParking
+<br/>
+curl -H "Content-Type: application/json" -X POST -d '[{"customer":{"name":"Peter"},"company":{"name": "company B"},"startParking":"2015-10-12T14:45:00", "finishParking":"2015-10-12T16:45:00"}, {"customer":{"name":"Peter", "premium":"true","email":"email@gjhj.com"},"company":{"name": "company B"},"startParking":"2015-10-12T14:45:00", "finishParking":"2015-10-12T16:45:00"}]' http://localhost:8080/parkingInvoice-web/rest/registerListParking
 
-http://localhost:8080/parkingInvoice-web/rest/customers/customerparkinglog/edson
+<br/>
+<h2>Query URL</h2>
+http://localhost:8080/parkingInvoice-web/rest/customerparkinglog/Peter
 
-http://localhost:8080/parkingInvoice-web/rest/customers/customer/edson
+http://localhost:8080/parkingInvoice-web/rest/customer/Peter
 		<br />
 	</ui:define>
 </ui:composition>
